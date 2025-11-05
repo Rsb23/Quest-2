@@ -1,3 +1,3 @@
 # Quest-2
 #### Idea
-CLI based maze game where player navigates through a randomly generated maze and encounters "gates" that require the application of programming concepts from class either by writing code against a timer or multiple choice. Completion of each gate not only results in getting closer to the goal but there can be a leveling system that allows the user to unlock cue cards that they can use for gates that they cannot complete.
+CLI based maze game where player navigates through a randomly generated maze and encounters "gates" that require answering a personal question about a guild member in truth or lie format. Completion of each gate not only results in getting closer to the goal but there can be a leveling system that allows the user to unlock cue cards that they can use for gates that they cannot complete.
