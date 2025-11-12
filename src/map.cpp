@@ -3,9 +3,24 @@
 #include <ctime>
 using namespace std;
 
+
 class Player {
+private:
+    int xpos {0}, ypos {0};
 public:
-    int xpos, ypos;
+    // getters and setters
+    void setXpos(int newXpos){
+        xpos = newXpos;
+    }
+    int getXpos(){
+        return xpos;
+    }
+    void setYpos(int newYpos){
+        ypos = newYpos;
+    }
+    int getYpos(){
+        return ypos;
+    }
     void move(string direction, vector<vector<string>>& map) {
         // "moves" character based on input, doesn't move if it detects a wall, and can be changed to start asking questions when detecting a guard
         if (direction == "w") {
@@ -99,8 +114,8 @@ public:
 
 int main() {
     // Placeholder width and height
-    int height = 10;
-    int width = 10;
+    int height {10};
+    int width {10};
 
     // Stores the previous value that the character was in
     int holdx;
@@ -113,12 +128,12 @@ int main() {
     Map testMap;
     Player test;
     
-    test.xpos = 1;
-    test.ypos = 1;
+    test.setXpos(1);
+    test.setYpos(1);
 
     // Creates the map
     vector<vector<string>> map = testMap.borderMap(width, height);
-    map[1][1] = "@";  // Place the player at the starting position
+    map[1][1] = "@";  // Place the player at the starting position taking into account wall thickness
     testMap.displayMap(map);
 
     // Main game loop
