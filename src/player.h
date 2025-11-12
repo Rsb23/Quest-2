@@ -1,16 +1,25 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <string>
+#include <vector>
+#include <iostream>
 
-
-class Player{
+class Player
+{
 private:
-    std::string desc {""};  // randomly picked from pre-determined array
+    std::string desc{""}; // randomly picked from pre-determined array
     std::string possibleDesc[5];
-    int lives {5};
-    int cueCardCount {0};
-    int gatesCompleted {0};
-    int points {0};
+    int lives{5};
+    int cueCardCount{0};
+    int gatesCompleted{0};
+    int points{0};
+
+    int xPos{0};
+    int yPos{0};
+
 public:
-    Player();
+    // Player();
     std::string getDesc();
     void setDesc(std::string newDesc);
     void randomlyPickDesc();
@@ -24,5 +33,14 @@ public:
     void resetGatesCompleted();
     int getPoints();
     void setPoints(int newPoints);
-    void adjustPoints(int amount);  // can be positive or negative
+    void adjustPoints(int amount); // can be positive or negative
+
+    // player movement functions
+    void setXPos(int newXPos);
+    int getXPos();
+    void setYPos(int newYPos);
+    int getYPos();
+    void move(std::string dir, std::vector<std::vector<std::string>> &map);
 };
+
+#endif
