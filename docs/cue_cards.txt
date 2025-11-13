@@ -1,0 +1,7 @@
+(Standard) Cue Card
+    10 points -> One Cue Card
+    Unlocks One Gate + Gate Points
+
+Supreme Cue Card
+    30 points -> One Supreme Cue Card
+    Unlocks One Warden + Warden Points
