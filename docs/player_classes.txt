@@ -1,11 +1,11 @@
 Bulwark The Guardian
 "When the storm hits, Bulwark stands unbroken"
-energy shield - prevents loss of points when gate is incorrect
+Energy Shield - prevents loss of points when Gate OR Warden is incorrect
 
 Aegis The Ravager
 "Breaker of oaths, bearer of darkness"
-vengeance protocol - starts with 3 cue cards
+Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card
 
 Ronan The Trickster
 "Illusion is the truth you can't handle"
-gambit shift - skip over 3 gates allowing progression but losing points and the gates are still there
+Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them

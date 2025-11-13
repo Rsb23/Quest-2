@@ -1,0 +1,12 @@
+Gate
+    one question
+    +5 points when correct, -1 points when incorrect (up to zero)
+    common
+    can be passed with 1 cue card
+
+Warden
+    three questions
+    either always lie or always tell the truth
+    +15 points when correct, 25% of points lost when incorrect guesses outnumber correct (i.e. 2 incorrect, 1 correct)
+    rare
+    can be passed with 1 supreme cue card
