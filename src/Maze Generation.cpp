@@ -21,7 +21,6 @@ vector<bool> CreateTile(){
     return exits;
 }
 
-//got this from stack overflow
 //checks to see if the tile is unitialized, which only occurs if a tile has no exits
 bool IsTileUninitialized(const vector<bool> &tile_exits) {
     for (bool exit_status : tile_exits) {
@@ -320,22 +319,22 @@ void FixWalls(vector<vector<vector<bool>>> &Map){
 
             //checks to see if each exit that the tile has is matched by the opposite exit (i.e left to right) in the tile which that exit would lead to
             //if it doesn't, it turns it into a wall
-            if(Map[i][j][0]){
+            if(Map[i][j][0] && j > 0){
                 if(!Map[i][j-1][2]){
                 Map[i][j][0] = 0;
             }
             }
-            if(Map[i][j][1]){
+            if(Map[i][j][1] && i<9){
                 if(!Map[i+1][j][3]){
                 Map[i][j][1] = 0;
                 }
             }
-            if(Map[i][j][2]){
+            if(Map[i][j][2] && j<9){
                 if(!Map[i][j+1][0]){
                 Map[i][j][2] = 0;
                 }
             }
-            if(Map[i][j][3]){
+            if(Map[i][j][3] && j>0){
                 if(!Map[i-1][j][1]){
                 Map[i][j][3] = 0;
                 }
@@ -347,13 +346,12 @@ void FixWalls(vector<vector<vector<bool>>> &Map){
 //Generates a finish by selecting the first eligible tile, starts from the furthest index values and moves inward
 //to try and get the exit far away from the start
 void GenerateFinish(vector<vector<vector<bool>>> &Map){
-    bool win = 1;
-    for(int i=9;i>0;i--){
-        for(int j = 9;j>0;j--){
+    for(int i=9;i>=0;i--){
+        for(int j=9;j>=0;j--){
             //gives the win flag to the first initialized tile it finds
             if(!IsTileUninitialized(Map[i][j])){
                 //sets the win flag by making one tile have more size than normal
-                Map[i][j].push_back(win);
+                Map[i][j].push_back(true);
                 return;
             }
         }
@@ -387,12 +385,12 @@ int main()
     // Loop continues until 10 tiles are completed by the DFS algorithm
     GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
     
-    // Call the GenerateMissingPaths function to fill in any uninitialized areas, could run more to make maze more complex.
-    for(int i = 0; i <5; i++){
+    // Call the GenerateMissingPaths function to fill in any uninitialized areas
+    for(int i = 0; i < 100; i++){
     GenerateMissingPaths(Map, completed_tiles_count); 
-    }
     //Places walls at locations where exits don't line up
     FixWalls(Map);
+    }
 
     //Make the win exist
     GenerateFinish(Map);
