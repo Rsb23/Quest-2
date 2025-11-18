@@ -28,7 +28,7 @@ public:
     void setCompleted(bool newCompleted);
 
     int makeRandomNum(int min, int max);
-    virtual void loadPrompt(const Player &_player);
+    virtual void loadPrompt(Player &_player);
 };
 
 #endif
