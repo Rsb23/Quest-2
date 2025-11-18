@@ -126,10 +126,6 @@ int main()
         Store _store;
 
         // Initialize map
-        // Map _map;
-
-        // Displays the tile that the player is on
-        DisplayTile(Map[PlayX][PlayY]);
 
         // Main game loop
         while (true)
@@ -149,11 +145,10 @@ int main()
             else if (input == 'e')
             {
                 std::cout << "Goodbye!\n";
-                break;
+                return 0;
             }
             else if (input == 'w' || input == 'a' || input == 's' || input == 'd')
             {
-                // Calls the Player Move function to let the player navigate
                 PlayerMove(input, PlayX, PlayY, CurrentExits, Map, PrevX, PrevY);
                 DisplayTile(Map[PlayX][PlayY]);
 
