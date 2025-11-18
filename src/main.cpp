@@ -159,6 +159,7 @@ int main()
                     if (engage == 'y')
                     {
                         _player.encounterGate(Map, PlayX, PlayY);
+                        DisplayTile(Map[PlayX][PlayY]);
                     }
                     else
                     {
@@ -176,6 +177,7 @@ int main()
                     if (engage == 'y')
                     {
                         _player.encounterWarden(Map, PlayX, PlayY);
+                        DisplayTile(Map[PlayX][PlayY]);
                     }
                     else
                     {
