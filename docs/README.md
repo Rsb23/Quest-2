@@ -1,3 +1,3 @@
 # Quest-2
 #### Idea
-CLI based maze game where player navigates through a randomly generated maze and encounters "gates" that require answering a personal question about a guild member in truth or lie format. Completion of each gate not only results in getting closer to the goal but there can be a leveling system that allows the user to unlock cue cards that they can use for gates that they cannot complete.
+CLI based maze game where player navigates through a randomly generated maze and encounters gates and wardens that require answering a personal question about a guild member in MC or truth or lie formats respectively. Completion of each gate not only results in getting closer to the goal but there can be a leveling system that allows the user to unlock cue cards and supreme cue cards that they can use for gates or wardens that they don't want to attempt. See `core_mechanics.md` for a more detailed explaination of the main game loop and logic.
