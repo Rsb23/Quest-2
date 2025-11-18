@@ -79,24 +79,92 @@ void Player::incrementWardensCompletedCount()
     wardensCompletedCount++;
 }
 
+bool Player::useCard(bool isGate)
+{
+    if (isGate && this->getCueCardCount() > 0)
+    {
+        std::cout << "You have " << this->getCueCardCount() << " cue cards\n";
+        std::cout << "Do you want to use a cue card to unlock the gate (y/n)?: ";
+
+        char res{'n'};
+        std::cin >> res;
+
+        if (res == 'y')
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else if (!isGate && this->getSupremeCueCardCount() > 0)
+    {
+        std::cout << "You have " << this->getSupremeCueCardCount() << " supreme cue cards\n";
+        std::cout << "Do you want to use a supreme cue card to unlock the warden (y/n)?: ";
+
+        char res{'n'};
+        std::cin >> res;
+
+        if (res == 'y')
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void Player::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
 {
     std::cout << "You have encountered an old gate. It's strong, oak wood creaks in the breeze.\n";
-    std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
 
-    Gate _gate;
+    bool useCC{useCard(true)};
 
-    _gate.loadPrompt(*this, Map, PlayX, PlayY);
+    if (useCC)
+    {
+        std::cout << "Wowowaaaw, you decided to use a cue card! The gate gets knocked down, its hinges snapping off in a flurry that ends in a cloud of dust\n";
+        Map[PlayX][PlayY][4] = 0; // clear the gate from the map/maze
+
+        this->setCueCardCount(this->getCueCardCount() - 1);
+        this->incrementGatesCompletedCount();
+    }
+    else
+    {
+        std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
+
+        Gate _gate;
+        _gate.loadPrompt(*this, Map, PlayX, PlayY);
+    }
 }
 
 void Player::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
 {
     std::cout << "You encounter a Warden guarding the passage. It's leathery skin groans under the stress of keeping it's diseased organs together.\n";
-    std::cout << "The Warden asks you three questions: \n\n";
 
-    Warden _warden;
+    bool useCC{useCard(true)};
 
-    _warden.loadPrompt(*this, Map, PlayX, PlayY);
+    if (useCC)
+    {
+        std::cout << "Wowowaaaw, you decided to use a supreme cue card! The warden falls to its knees as its flesh melts into dust\n";
+        Map[PlayX][PlayY][5] = 0; // clear the warden from the map/maze
+
+        this->setSupremeCueCardCount(this->getSupremeCueCardCount() - 1);
+        this->incrementWardensCompletedCount();
+    }
+    else
+    {
+        std::cout << "The Warden asks you three questions: \n\n";
+
+        Warden _warden;
+        _warden.loadPrompt(*this, Map, PlayX, PlayY);
+    }
 }
 
 // player movement functions
