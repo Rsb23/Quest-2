@@ -42,8 +42,8 @@ public:
 
     void incrementWardensCompletedCount();
 
-    void encounterGate();
-    void encounterWarden();
+    void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 
     // player movement functions
     void setXPos(int newXPos);

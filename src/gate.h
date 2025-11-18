@@ -28,7 +28,7 @@ public:
     void setCompleted(bool newCompleted);
 
     int makeRandomNum(int min, int max);
-    virtual void loadPrompt(Player &_player);
+    void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 };
 
 #endif

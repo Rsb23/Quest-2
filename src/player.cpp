@@ -79,24 +79,24 @@ void Player::incrementWardensCompletedCount()
     wardensCompletedCount++;
 }
 
-void Player::encounterGate()
+void Player::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
 {
     std::cout << "You have encountered an old gate. It's strong, oak wood creaks in the breeze.\n";
     std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
 
     Gate _gate;
 
-    _gate.loadPrompt(*this);
+    _gate.loadPrompt(*this, Map, PlayX, PlayY);
 }
 
-void Player::encounterWarden()
+void Player::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
 {
     std::cout << "You encounter a Warden guarding the passage. It's leathery skin groans under the stress of keeping it's diseased organs together.\n";
     std::cout << "The Warden asks you three questions: \n\n";
 
     Warden _warden;
 
-    _warden.loadPrompt(*this);
+    _warden.loadPrompt(*this, Map, PlayX, PlayY);
 }
 
 // player movement functions

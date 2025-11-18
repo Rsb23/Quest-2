@@ -131,107 +131,96 @@ int main()
         // Displays the tile that the player is on
         DisplayTile(Map[PlayX][PlayY]);
 
-        if (Map[PlayX][PlayY][4])
+        // Main game loop
+        while (true)
         {
-            std::cout << "There's A Gate!\n";
-            std::cout << "Challenge? (y/n)\n";
-            std::cin >> engage;
+            char input{'e'};
 
-            if (engage == 'y')
+            // read player input (either direction, entering store, or exiting program)
+            std::cout << "Enter A Direction (w a s d), Enter The Store (b), or Exit (e): ";
+            std::cin >> input;
+
+            if (input == 'b')
             {
-                _player.encounterGate();
+                Store _store;
+                _store.storeMenu(_player);
+                DisplayTile(Map[PlayX][PlayY]);
+            }
+            else if (input == 'e')
+            {
+                std::cout << "Goodbye!\n";
+                break;
+            }
+            else if (input == 'w' || input == 'a' || input == 's' || input == 'd')
+            {
+                // holdx = _player.getXPos();
+                // holdy = _player.getYPos();
+
+                // Move the player
+                // _player.move(input, map);
+
+                // Update the map with the new position of the player
+                // map[holdx][holdy] = ".";                         // Remove the player from the old position
+                // map[_player.getXPos()][_player.getYPos()] = "@"; // Place the player at the new position
+
+                // Display the updated map
+                // testMap.displayMap(map);
+
+                // Calls the Player Move function to let the player navigate
+                PlayerMove(input, PlayX, PlayY, CurrentExits, Map, PrevX, PrevY);
+                DisplayTile(Map[PlayX][PlayY]);
+
+                if (Map[PlayX][PlayY][4])
+                {
+                    std::cout << "There's A Gate!\n";
+                    std::cout << "Challenge? (y/n)\n";
+                    std::cin >> engage;
+
+                    if (engage == 'y')
+                    {
+                        _player.encounterGate(Map, PlayX, PlayY);
+                    }
+                    else
+                    {
+                        PlayX = PrevX;
+                        PlayY = PrevY;
+                    }
+                }
+
+                if (Map[PlayX][PlayY][5])
+                {
+                    std::cout << "There's A Warden\n";
+                    std::cout << "Answers the question? (y/n)\n";
+                    std::cin >> engage;
+
+                    if (engage == 'y')
+                    {
+                        _player.encounterWarden(Map, PlayX, PlayY);
+                    }
+                    else
+                    {
+                        PlayX = PrevX;
+                        PlayY = PrevY;
+                        DisplayTile(Map[PlayX][PlayY]);
+                    };
+                }
+
+                DisplayTile(Map[PlayX][PlayY]);
             }
             else
             {
-                PlayX = PrevX;
-                PlayY = PrevY;
-                DisplayTile(Map[PlayX][PlayY]);
-            }
-
-            // Main game loop
-            while (true)
-            {
-                char input{'e'};
-
-                // read player input (either direction, entering store, or exiting program)
-                std::cout << "Enter A Direction (w a s d), Enter The Store (b), or Exit (e): ";
-                std::cin >> input;
-
-                if (input == 'b')
-                {
-                    Store _store;
-                    _store.storeMenu(_player);
-                }
-                else if (input == 'e')
-                {
-                    std::cout << "Goodbye!\n";
-                    break;
-                }
-                else if (input == 'w' || input == 'a' || input == 's' || input == 'd')
-                {
-                    // holdx = _player.getXPos();
-                    // holdy = _player.getYPos();
-
-                    // Move the player
-                    // _player.move(input, map);
-
-                    // Update the map with the new position of the player
-                    // map[holdx][holdy] = ".";                         // Remove the player from the old position
-                    // map[_player.getXPos()][_player.getYPos()] = "@"; // Place the player at the new position
-
-                    // Display the updated map
-                    // testMap.displayMap(map);
-
-                    // Calls the Player Move function to let the player navigate
-                    PlayerMove(move, PlayX, PlayY, CurrentExits, Map, PrevX, PrevY);
-                }
-                else
-                {
-                    std::cout << "Please enter a valid option\n!";
-                }
-
-                // Run this is the answer is correct to erase gate from the map
-                /*if(answer){
-                    Map[PlayX][PlayY][4] = 0;
-                } else{
-                    //Whatever happens when you fail a gate
-                }*/
-            }
-
-            if (Map[PlayX][PlayY][5])
-            {
-                std::cout << "There's A Warden\n";
-                std::cout << "Answers the question? (y/n)\n";
-                std::cin >> engage;
-
-                if (engage == 'y')
-                {
-                    _player.encounterWarden();
-                }
-                else
-                {
-                    PlayX = PrevX;
-                    PlayY = PrevY;
-                    DisplayTile(Map[PlayX][PlayY]);
-                }
-
-                // Run this is the answer is correct to erase Warden from the map
-                /*if(answer){
-                    Map[PlayX][PlayY][5] = 0;
-                } else{
-                    //Whatever happens when you fail a Warden
-                }*/
-            }
-
-            // checks for the win flag
-            if (Map[PlayX][PlayY][6])
-            {
-                win = true;
-                break;
+                std::cout << "Please enter a valid option\n!";
             }
         }
 
-        std::cout << "You win!";
-        return 0;
+        // checks for the win flag
+        if (Map[PlayX][PlayY][6])
+        {
+            win = true;
+            break;
+        }
     }
+
+    std::cout << "You win!";
+    return 0;
 }

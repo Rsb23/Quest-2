@@ -20,7 +20,7 @@ void Warden::assignTruthfulness()
         setIsTruthful(makeRandomNum(0, 1));
 }
 
-void Warden::loadPrompt(Player &_player)
+void Warden::loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
 {
         int questionsCorrect{0};
 
@@ -79,6 +79,7 @@ void Warden::loadPrompt(Player &_player)
 
                                 std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
+                                Map[PlayX][PlayY][5] = 0;
                                 setCompleted(true);
                                 _player.adjustPoints(pointsValue);
                                 questionsCorrect++;
@@ -148,6 +149,7 @@ void Warden::loadPrompt(Player &_player)
 
                                 std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
+                                                                Map[PlayX][PlayY][5] = 0;
                                 setCompleted(true);
                                 _player.adjustPoints(pointsValue);
                                 questionsCorrect++;

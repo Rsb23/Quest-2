@@ -46,7 +46,7 @@ public:
 
     void assignTruthfulness();
 
-    void loadPrompt(Player &_player) override; // implicitly overload from base class
+    void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 };
 
 #endif
