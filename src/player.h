@@ -42,6 +42,8 @@ public:
 
     void incrementWardensCompletedCount();
 
+    bool useCard(bool isGate);
+
     void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
     void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 
