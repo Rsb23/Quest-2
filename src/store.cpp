@@ -1,31 +1,33 @@
 #include "store.h"
 
-void Store::storeMenu()
+void Store::storeMenu(Player &player)
 {
     while (true)
     {
+        // gives user options to choose from
         std::cout << "\nWelcome to the Store!" << std::endl;
         std::cout << "1: Purchase a Cue Card (10 pts)" << std::endl;
         std::cout << "2: Purchase a Supreme Cue Card (30 pts)" << std::endl;
         std::cout << "3: Check inventory" << std::endl;
-        std::cout << "4: Exit\n"
-                  << std::endl;
+        std::cout << "4: Exit\n" << std::endl;
 
+        //prompts user for choice
         std::cout << "Enter your choice: ";
         std::cin >> itemChoice;
 
+        // case checks bring the user back to the store after every function
         if (itemChoice == 1)
         {
-            if (points < 10)
+            if (player.getPoints() < 10)
             {
                 std::cout << "Insufficient funds, please try again!" << std::endl;
             }
-
             else
             {
-                purchaseCC();
+                purchaseCC(player);
             }
         }
+            
         else if (itemChoice == 2)
         {
             if (points < 30)
@@ -35,13 +37,15 @@ void Store::storeMenu()
 
             else
             {
-                purchaseSCC();
+                purchaseSCC(player);
             }
         }
+            
         else if (itemChoice == 3)
         {
-            showInventory();
+            showInventory(player);
         }
+            
         else if (itemChoice == 4)
         {
             std::cout << "Thank you for visiting the store, come again soon!" << std::endl;
@@ -54,32 +58,32 @@ void Store::storeMenu()
     }
 }
 
-void Store::purchaseCC()
+void Store::purchaseCC(Player &player)
 {
-    points -= 10;
-    cueCardCount++;
+    player.adjustPoints(-10);
+    player.setCueCardCount(player.getCueCardCount() + 1);
 
     std::cout << "You have purchased a Cue Card!" << std::endl;
 
-    showInventory();
+    showInventory(player);
 }
 
-void Store::purchaseSCC()
+void Store::purchaseSCC(Player &player)
 {
-    points -= 30;
-    supremeCardCount++;
+    player.adjustPoints(-30);
+    player.setSupremeCueCardCount(player.getSupremeCueCardCount() + 1);
 
     std::cout << "You have purchased a Supreme Cue Card!" << std::endl;
 
-    showInventory();
+    showInventory(player);
 }
 
-void Store::showInventory()
+void Store::showInventory(Player &player)
 {
     std::cout << "\n ---- Inventory ---- " << std::endl;
-    std::cout << "Points: " << points << std::endl;
-    std::cout << "Cue Cards: " << cueCardCount << std::endl;
-    std::cout << "Supreme Cue Cards: " << supremeCardCount << std::endl;
+    std::cout << "Points: " << player.getPoints() << std::endl;
+    std::cout << "Cue Cards: " << player.getCueCardCount() << std::endl;
+    std::cout << "Supreme Cue Cards: " << player.getSupremeCardCount() << std::endl;
 }
 
 int main()
