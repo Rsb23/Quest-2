@@ -1,10 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <ctime>
-#include <cstdlib>
-#include "Maze Generation.h"
+#include "maze.h"
 using namespace std;
-
 
 //Sets the exits for the starting tile
 vector<bool> InitialTile(){

@@ -1,6 +1,9 @@
-#ifndef MAZEGENERATION_H
-#define MAZEGENERATION_H
+#ifndef MAZE_H
+#define MAZE_H
 #include "store.h"
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
 #include <vector>
 
 void GenerateWarden(std::vector<std::vector<std::vector<bool>>> &Map);
