@@ -16,7 +16,7 @@ public:
     void storeMenu(Player &player);
     void purchaseCC(Player &player);
     void purchaseSCC(Player &player);
-    void showInventory(const Player &player);
+    void showInventory(Player &player);
 };
 
 #endif

@@ -30,7 +30,7 @@ void Store::storeMenu(Player &player)
             
         else if (itemChoice == 2)
         {
-            if (points < 30)
+            if (player.getPoints() < 30)
             {
                 std::cout << "Insufficient funds, please try again!" << std::endl;
             }
@@ -83,13 +83,5 @@ void Store::showInventory(Player &player)
     std::cout << "\n ---- Inventory ---- " << std::endl;
     std::cout << "Points: " << player.getPoints() << std::endl;
     std::cout << "Cue Cards: " << player.getCueCardCount() << std::endl;
-    std::cout << "Supreme Cue Cards: " << player.getSupremeCardCount() << std::endl;
-}
-
-int main()
-{
-    Store myStore;
-    myStore.storeMenu();
-
-    return 0;
+    std::cout << "Supreme Cue Cards: " << player.getSupremeCueCardCount() << std::endl;
 }
