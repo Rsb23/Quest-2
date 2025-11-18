@@ -9,7 +9,6 @@ class Store
 private:
     // variables
     int itemChoice;
-    int itemCount;
 
 public:
     // declare the functi9ns
