@@ -51,6 +51,7 @@ public:
     void setYPos(int newYPos);
     int getYPos();
     void move(char dir, std::vector<std::vector<std::string>> &map);
+    void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &PrevX, int &PrevY);
 };
 
 #endif

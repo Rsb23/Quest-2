@@ -25,7 +25,7 @@ private:
     std::vector<std::string> nosaQuestions = {"Nosa has lived in how many countries?", "Nosa played what sport for nearly two years?", "Nosa can play more than how many instruments?"};
     std::vector<std::string> nosaAns = {"Three", "Semi-Professional Soccer", "Two"};
     std::vector<std::string> nosaFalseAns = {"Two", "Semi-Professional Rugby", "Three"};
-    
+
     std::vector<std::string> liamQuestions = {"Liam used to own what animals?", "One of Liam's hobbies is what?", "Liam owns five 3D printers, one of which can print what material?"};
     std::vector<std::string> liamAns = {"Chickens and quails", "Blacksmithing", "Chocolate"};
     std::vector<std::string> liamFalseAns = {"Cows and horses", "Welding", "ABS Plastic"};
@@ -39,14 +39,14 @@ private:
     std::vector<std::string> avneetFalseAns = {"Hockey", "Quebec City", "Twins"};
 
 public:
-    Warden();  // constructor used for setting points value
+    Warden(); // constructor used for setting points value
     // getters & setters
     bool getIsTruthful();
     void setIsTruthful(bool inputIsTruthful);
 
     void assignTruthfulness();
 
-    void loadPrompt(const Player &_player);  // implicitly overload from base class
+    void loadPrompt(Player &_player) override; // implicitly overload from base class
 };
 
 #endif

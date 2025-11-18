@@ -3,69 +3,84 @@
 #include "warden.h"
 #include "store.h"
 
-
 // getters and setterse
-std::string Player::getDesc(){
+std::string Player::getDesc()
+{
     return desc;
 }
 
-void Player::setDesc(std::string newDesc){
+void Player::setDesc(std::string newDesc)
+{
     desc = newDesc;
 }
 
-int Player::getPoints(){
+int Player::getPoints()
+{
     return points;
 }
 
-void Player::setPoints(int newPoints){
+void Player::setPoints(int newPoints)
+{
     points = newPoints;
 }
 
-void Player::adjustPoints(int amount){
+void Player::adjustPoints(int amount)
+{
     points += amount;
 }
 
-int Player::getCueCardCount(){
+int Player::getCueCardCount()
+{
     return ccCount;
 }
 
-void Player::setCueCardCount(int newCueCardCount){
+void Player::setCueCardCount(int newCueCardCount)
+{
     ccCount = newCueCardCount;
 }
 
-int Player::getSupremeCueCardCount(){
+int Player::getSupremeCueCardCount()
+{
     return sccCount;
 }
 
-void Player::setSupremeCueCardCount(int newSupremeCueCardCount){
+void Player::setSupremeCueCardCount(int newSupremeCueCardCount)
+{
     sccCount = newSupremeCueCardCount;
 }
 
-int Player::getGatesCompletedCount(){
+int Player::getGatesCompletedCount()
+{
     return gatesCompletedCount;
 }
 
-void Player::setGatesCompletedCount(int newGatesCompletedCount){
+void Player::setGatesCompletedCount(int newGatesCompletedCount)
+{
     gatesCompletedCount = newGatesCompletedCount;
 }
 
-void Player::incrementGatesCompletedCount(){
+void Player::incrementGatesCompletedCount()
+{
     gatesCompletedCount++;
 }
 
-int Player::getWardensCompletedCount(){
+int Player::getWardensCompletedCount()
+{
     return wardensCompletedCount;
 }
 
-void Player::setWardensCompletedCount(int newWardensCompletedCount){
+void Player::setWardensCompletedCount(int newWardensCompletedCount)
+{
     wardensCompletedCount = newWardensCompletedCount;
 }
 
-void Player::incrementWardensCompletedCount(){
+void Player::incrementWardensCompletedCount()
+{
     wardensCompletedCount++;
 }
 
-void Player::encounterGate(){
+void Player::encounterGate()
+{
     std::cout << "You have encountered an old gate. It's strong, oak wood creaks in the breeze.\n";
     std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
 
@@ -74,7 +89,8 @@ void Player::encounterGate(){
     _gate.loadPrompt(*this);
 }
 
-void Player::encounterWarden(){
+void Player::encounterWarden()
+{
     std::cout << "You encounter a Warden guarding the passage. It's leathery skin groans under the stress of keeping it's diseased organs together.\n";
     std::cout << "The Warden asks you three questions: \n\n";
 
@@ -166,45 +182,71 @@ void Player::move(char dir, std::vector<std::vector<std::string>> &map)
     else
     {
         std::cout << "Invalid character entered" << "\n";
+    }
+}
 
-void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map,int &PrevX, int &PrevY, Store store){
+void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &PrevX, int &PrevY)
+{
     PrevY = PlayY;
     PrevX = PlayX;
-    //Shows all moves to the player
-    std::cout<<"W: Move Up\n" << "A: Move Left\n" << "S: Move Down\n" << "D: Move Right\n"<<"B: Open Shop\n";
+    /*
+    // Shows all moves to the player
+    std::cout << "W: Move Up\n"
+              << "A: Move Left\n"
+              << "S: Move Down\n"
+              << "D: Move Right\n"
+              << "B: Open Shop\n";
 
-    std::cin>>move;
+    std::cin >> move;*/
 
-
-    //checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
-    //all exits should be because of FixWalls()
-    if(move == 'a'){
-        if(!Map[PlayX][PlayY][0] || !Map[PlayX][PlayY-1][2]){
-            std::cout<<"There's a wall blocking your path"<<std::endl;
-        } else {
-       PlayY --;
+    // checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
+    // all exits should be because of FixWalls()
+    if (move == 'a')
+    {
+        if (!Map[PlayX][PlayY][0] || !Map[PlayX][PlayY - 1][2])
+        {
+            std::cout << "There's a wall blocking your path" << std::endl;
         }
-    } else if (move == 's'){
-        if(!Map[PlayX][PlayY][1] || !Map[PlayX+1][PlayY][3]){
-            std::cout<<"There's a wall blocking your path"<<std::endl;
-        } else {
-       PlayX ++;
+        else
+        {
+            PlayY--;
         }
-    } else if (move == 'd'){
-        if(!Map[PlayX][PlayY][2] || !Map[PlayX][PlayY+1][0]){
-            std::cout<<"There's a wall blocking your path"<<std::endl;
-        } else {
-       PlayY ++;
+    }
+    else if (move == 's')
+    {
+        if (!Map[PlayX][PlayY][1] || !Map[PlayX + 1][PlayY][3])
+        {
+            std::cout << "There's a wall blocking your path" << std::endl;
         }
-    } else if (move == 'w'){
-        if(!Map[PlayX][PlayY][3] || !Map[PlayX-1][PlayY][1]){
-            std::cout<<"There's a wall blocking your path"<<std::endl;
-        } else {
-       PlayX --;
+        else
+        {
+            PlayX++;
         }
-    } else if(move == 'b'){
-        store.StoreMenu();
-    } else {
-        std::cout<<"Please Enter A Valid Direction";
+    }
+    else if (move == 'd')
+    {
+        if (!Map[PlayX][PlayY][2] || !Map[PlayX][PlayY + 1][0])
+        {
+            std::cout << "There's a wall blocking your path" << std::endl;
+        }
+        else
+        {
+            PlayY++;
+        }
+    }
+    else if (move == 'w')
+    {
+        if (!Map[PlayX][PlayY][3] || !Map[PlayX - 1][PlayY][1])
+        {
+            std::cout << "There's a wall blocking your path" << std::endl;
+        }
+        else
+        {
+            PlayX--;
+        }
+    }
+    else
+    {
+        std::cout << "Please Enter A Valid Direction";
     }
 }

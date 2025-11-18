@@ -1,6 +1,16 @@
+/*
 #include "maze.h"
 #include "player.h"
 #include "store.h"
+#include "gate.h"
+#include "warden.h"
+*/
+
+#include "maze.cpp"
+#include "player.cpp"
+#include "store.cpp"
+#include "gate.cpp"
+#include "warden.cpp"
 
 int main()
 {
@@ -8,7 +18,7 @@ int main()
     Store store;
     char move;
     char engage;
-    bool win = 0;
+    bool win = false;
     int y = 0; // Current column index (0-9)
     int x = 0; // Current row index (0-9)
     int PrevX;
@@ -21,46 +31,48 @@ int main()
     std::vector<std::vector<int>> pathStack;
 
     // A counter to track how many tiles have been initialized (for GenerateMissingPaths)
-    int completed_tiles_count = 0; 
-    
-    // 10 x 10 x 4 3d vector for the map
-    std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10,std::vector<bool>(7,0)));
+    int completed_tiles_count = 0;
 
-    Map[x][y] = InitialTile(); 
+    // 10 x 10 x 4 3d vector for the map
+    std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10, std::vector<bool>(7, 0)));
+
+    Map[x][y] = InitialTile();
     pathStack.push_back({x, y}); // Push starting tile onto the stack
-    completed_tiles_count++; // Start tile is the first completed tile
+    completed_tiles_count++;     // Start tile is the first completed tile
 
     // Loop continues until 10 tiles are completed by the DFS algorithm
     GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
-    
+
     // Call the GenerateMissingPaths function to fill in any uninitialized areas
-    for(int i = 0; i < 100; i++){
-        GenerateMissingPaths(Map, completed_tiles_count); 
-        //Places walls at locations where exits don't line up
+    for (int i = 0; i < 100; i++)
+    {
+        GenerateMissingPaths(Map, completed_tiles_count);
+        // Places walls at locations where exits don't line up
         FixWalls(Map);
     }
 
-    //Make the win exist
+    // Make the win exist
     GenerateFinish(Map);
-    //Displays the inital tile before the game loop starts
+    // Displays the inital tile before the game loop starts
     DisplayTile(Map[PlayX][PlayY]);
 
     // Generate enemy locations
     GenerateGates(Map);
     GenerateWarden(Map);
-    
-    //Main game loop
-    while(win == 0){
-        //Tracks current tiles exits
+
+    // Main game loop
+    while (!win)
+    {
+        // Tracks current tiles exits
         CurrentExits = Map[PlayX][PlayY];
 
         // PLAYER CLASS TYPE NOT YET IMPLEMENTED
         // Gets player class/type
         // int classSelection{0};
 
+        /*
         while (true)
         {
-            /*
             std::cout << "Please Choose Player Class)\n";
             std::cout << "Bulwark The Guardian\n"
                     << "\"When the storm hits, Bulwark stands unbroken\"\n"
@@ -110,103 +122,116 @@ int main()
         // Create player class (override above, player class types not yet implemented)
         Player _player;
 
-        // Initialize map
-        Map testMap;
-        //Calls the Player Move function to let the player navigate
-        PlayerMove(move,PlayX,PlayY,CurrentExits,Map, PrevX, PrevY, store);
+        // Create Store class
+        Store _store;
 
-        //Displays the tile that the player is on
+        // Initialize map
+        // Map _map;
+
+        // Displays the tile that the player is on
         DisplayTile(Map[PlayX][PlayY]);
 
-        if(Map[PlayX][PlayY][4]){
-            std::cout<<"There's A Gate\n";
-            std::cout<<"Answers the question? (y/n)\n";
-            std::cin>>engage;
-
-            if(engage == 'y'){
-                //whatever happens when you engage a gate
-            } else {
-                PlayX = PrevX;
-                PlayY = PrevY;
-                DisplayTile(Map[PlayX][PlayY]);
-            }
-
-        // Main game loop
-        while (true)
+        if (Map[PlayX][PlayY][4])
         {
-            char input{'e'};
+            std::cout << "There's A Gate!\n";
+            std::cout << "Challenge? (y/n)\n";
+            std::cin >> engage;
 
-            // read player input (either direction, entering store, or exiting program)
-            std::cout << "Enter A Direction (w a s d), Enter The Store (b), or Exit (e): ";
-            std::cin >> input;
-
-            if (input == 'b')
+            if (engage == 'y')
             {
-                Store _store;
-                _store.storeMenu();
-            }
-            else if (input == 'e')
-            {
-                std::cout << "Goodbye!\n";
-                break;
-            }
-            else if (input == 'w' || input == 'a' || input == 's' || input == 'd')
-            {
-                holdx = test.getXPos();
-                holdy = test.getYPos();
-
-                // Move the player
-                test.move(input, map);
-
-                // Update the map with the new position of the player
-                map[holdx][holdy] = ".";                   // Remove the player from the old position
-                map[test.getXPos()][test.getYPos()] = "@"; // Place the player at the new position
-
-                // Display the updated map
-                testMap.displayMap(map);
+                _player.encounterGate();
             }
             else
             {
-                std::cout << "Please enter a valid option\n!";
-            }
-
-            //Run this is the answer is correct to erase gate from the map
-            /*if(answer){
-                Map[PlayX][PlayY][4] = 0;
-            } else{
-                //Whatever happens when you fail a gate 
-            }*/
-        }
-
-        if(Map[PlayX][PlayY][5]){
-            std::cout<<"There's A Warden\n";
-            std::cout<<"Answers the question? (y/n)\n";
-            std::cin>>engage;
-
-            if(engage == 'y'){
-                //whatever happens when you engage a gate
-            } else {
                 PlayX = PrevX;
                 PlayY = PrevY;
                 DisplayTile(Map[PlayX][PlayY]);
             }
 
+            // Main game loop
+            while (true)
+            {
+                char input{'e'};
 
-            //Run this is the answer is correct to erase Warden from the map
-            /*if(answer){
-                Map[PlayX][PlayY][5] = 0;
-            } else{
-                //Whatever happens when you fail a Warden
-            }*/
+                // read player input (either direction, entering store, or exiting program)
+                std::cout << "Enter A Direction (w a s d), Enter The Store (b), or Exit (e): ";
+                std::cin >> input;
+
+                if (input == 'b')
+                {
+                    Store _store;
+                    _store.storeMenu(_player);
+                }
+                else if (input == 'e')
+                {
+                    std::cout << "Goodbye!\n";
+                    break;
+                }
+                else if (input == 'w' || input == 'a' || input == 's' || input == 'd')
+                {
+                    // holdx = _player.getXPos();
+                    // holdy = _player.getYPos();
+
+                    // Move the player
+                    // _player.move(input, map);
+
+                    // Update the map with the new position of the player
+                    // map[holdx][holdy] = ".";                         // Remove the player from the old position
+                    // map[_player.getXPos()][_player.getYPos()] = "@"; // Place the player at the new position
+
+                    // Display the updated map
+                    // testMap.displayMap(map);
+
+                    // Calls the Player Move function to let the player navigate
+                    PlayerMove(move, PlayX, PlayY, CurrentExits, Map, PrevX, PrevY);
+                }
+                else
+                {
+                    std::cout << "Please enter a valid option\n!";
+                }
+
+                // Run this is the answer is correct to erase gate from the map
+                /*if(answer){
+                    Map[PlayX][PlayY][4] = 0;
+                } else{
+                    //Whatever happens when you fail a gate
+                }*/
+            }
+
+            if (Map[PlayX][PlayY][5])
+            {
+                std::cout << "There's A Warden\n";
+                std::cout << "Answers the question? (y/n)\n";
+                std::cin >> engage;
+
+                if (engage == 'y')
+                {
+                    _player.encounterWarden();
+                }
+                else
+                {
+                    PlayX = PrevX;
+                    PlayY = PrevY;
+                    DisplayTile(Map[PlayX][PlayY]);
+                }
+
+                // Run this is the answer is correct to erase Warden from the map
+                /*if(answer){
+                    Map[PlayX][PlayY][5] = 0;
+                } else{
+                    //Whatever happens when you fail a Warden
+                }*/
+            }
+
+            // checks for the win flag
+            if (Map[PlayX][PlayY][6])
+            {
+                win = true;
+                break;
+            }
         }
 
-        //checks for the win flag
-        if(Map[PlayX][PlayY][6]){
-            win=1;
-            break;
-        }
-        }
-
-        std::cout << "You win";
+        std::cout << "You win!";
         return 0;
+    }
 }
