@@ -2,26 +2,26 @@
 #include <vector>
 #include <ctime>
 #include <cstdlib>
+#include "Maze Generation.h"
 using namespace std;
 
 
 //Sets the exits for the starting tile
 vector<bool> InitialTile(){
     vector<bool> exits;
-    exits = {0,1,1,0};
+    exits = {0,1,1,0,0,0,0};
     return exits;
 }
 
 //randomly generates exits when called
 vector<bool> CreateTile(){
-    vector<bool> exits = {0,0,0,0};
+    vector<bool> exits = {0,0,0,0,0,0,0};
     for (int i = 0; i < 4 ; i++){
         exits[i] = rand()%2;
     }
     return exits;
 }
 
-//got this from stack overflow
 //checks to see if the tile is unitialized, which only occurs if a tile has no exits
 bool IsTileUninitialized(const vector<bool> &tile_exits) {
     for (bool exit_status : tile_exits) {
@@ -55,8 +55,19 @@ void DisplayTile(vector<bool> exits) {
             } if(exits[3] == 1 && ((j==4||j==5||j==6)&&(i<=6))){
                 Display[i][j] = ".";
             }
+            if(exits[4]){
+                for(int i=4; i<=6; i++){
+                    for(int j=4; j<=6; j++){
+                Display[i][j] = "#";
+                }
+            }
+            } else if (exits[5]){
+                Display[5][5] = "骨";
+            } else {
             Display[5][5] = "@";
+            }
             cout << Display[i][j] << " "; 
+
         }
 
         cout << endl; 
@@ -110,55 +121,6 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
     } 
 }
 
-void PlayerMove(int &move, int &PlayX, int &PlayY, vector<bool> CurrentExits, vector<vector<vector<bool>>> &Map){
-
-    //Shows all eligible moves to the player
- if(CurrentExits[0]){
-        cout<<"1: Move Left"<<endl;
-    }
-    if(CurrentExits[1]){
-        cout<<"2: Move Down"<<endl;
-    }
-    if(CurrentExits[2]){
-        cout<<"3: Move Right"<<endl;
-    }
-    if(CurrentExits[3]){
-        cout<<"4: Move Up"<<endl;
-    }
-
-    cin>>move;
-
-
-    //checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
-    //all exits should be because of FixWalls()
-    if(move == 1){
-        if(!Map[PlayX][PlayY][0] || !Map[PlayX][PlayY-1][2]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayY --;
-        }
-    } else if (move == 2){
-        if(!Map[PlayX][PlayY][1] || !Map[PlayX+1][PlayY][3]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayX ++;
-        }
-    } else if (move == 3){
-        if(!Map[PlayX][PlayY][2] || !Map[PlayX][PlayY+1][0]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayY ++;
-        }
-    } else if (move == 4){
-        if(!Map[PlayX][PlayY][3] || !Map[PlayX-1][PlayY][1]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayX --;
-        }
-    } else {
-        cout<<"Please Enter A Valid Direction";
-    }
-}
 
 void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map, vector<bool> &EligibleExits,int &x, int &y, vector<vector<int>> &pathStack){
     int ForcedExit = 3;
@@ -320,22 +282,22 @@ void FixWalls(vector<vector<vector<bool>>> &Map){
 
             //checks to see if each exit that the tile has is matched by the opposite exit (i.e left to right) in the tile which that exit would lead to
             //if it doesn't, it turns it into a wall
-            if(Map[i][j][0]){
+            if(Map[i][j][0] && j > 0){
                 if(!Map[i][j-1][2]){
                 Map[i][j][0] = 0;
             }
             }
-            if(Map[i][j][1]){
+            if(Map[i][j][1] && i<9){
                 if(!Map[i+1][j][3]){
                 Map[i][j][1] = 0;
                 }
             }
-            if(Map[i][j][2]){
+            if(Map[i][j][2] && j<9){
                 if(!Map[i][j+1][0]){
                 Map[i][j][2] = 0;
                 }
             }
-            if(Map[i][j][3]){
+            if(Map[i][j][3] && j>0){
                 if(!Map[i-1][j][1]){
                 Map[i][j][3] = 0;
                 }
@@ -347,76 +309,54 @@ void FixWalls(vector<vector<vector<bool>>> &Map){
 //Generates a finish by selecting the first eligible tile, starts from the furthest index values and moves inward
 //to try and get the exit far away from the start
 void GenerateFinish(vector<vector<vector<bool>>> &Map){
-    bool win = 1;
-    for(int i=9;i>0;i--){
-        for(int j = 9;j>0;j--){
+    for(int i=9;i>=0;i--){
+        for(int j=9;j>=0;j--){
             //gives the win flag to the first initialized tile it finds
             if(!IsTileUninitialized(Map[i][j])){
-                //sets the win flag by making one tile have more size than normal
-                Map[i][j].push_back(win);
+                //sets the win flag
+                Map[i][j][6] = 1;
                 return;
             }
         }
     }
 }
 
-int main()
-{
-    srand(time(0));
-    int move = 0;
-    bool win = 0;
-    int y = 0; // Current column index (0-9)
-    int x = 0; // Current row index (0-9)
-    int PlayX = x;
-    int PlayY = y;
-    vector<bool> CurrentExits;
-    vector<bool> EligibleExits;
-    // Add a stack for backtracking: stores {x, y} pairs
-    vector<vector<int>> pathStack;
-
-    // A counter to track how many tiles have been initialized (for GenerateMissingPaths)
-    int completed_tiles_count = 0; 
-    
-    // 10 x 10 x 4 3d vector for the map
-    vector<vector<vector<bool>>> Map(10, vector<vector<bool>>(10,vector<bool>(4,0)));
-
-    Map[x][y] = InitialTile(); 
-    pathStack.push_back({x, y}); // Push starting tile onto the stack
-    completed_tiles_count++; // Start tile is the first completed tile
-
-    // Loop continues until 10 tiles are completed by the DFS algorithm
-    GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
-    
-    // Call the GenerateMissingPaths function to fill in any uninitialized areas, could run more to make maze more complex.
-    for(int i = 0; i <5; i++){
-    GenerateMissingPaths(Map, completed_tiles_count); 
+void GenerateGates(vector<vector<vector<bool>>> &Map){
+    for(int i=9;i>=0;i--){
+        for(int j=9;j>=0;j--){
+            //Makes sure the tiles are initialized before placing a gate there
+            if(!IsTileUninitialized(Map[i][j])){
+                //1/5 chance of a gate being placed
+                if(!Map[i][j][6]){
+                    if(rand()%5 == 0){
+                        Map[i][j][4] = 1;
+                    } else {
+                        Map[i][j][4] = 0;
+                    }
+                } else {
+                    Map[i][j][4] = 0;
+                }
+            }
+        }
     }
-    //Places walls at locations where exits don't line up
-    FixWalls(Map);
+}
 
-    //Make the win exist
-    GenerateFinish(Map);
-    //Displays the inital tile before the game loop starts
-    DisplayTile(Map[PlayX][PlayY]);
-
-    //Main game loop
-    while(win == 0){
-    //Tracks current tiles exits
-    CurrentExits = Map[PlayX][PlayY];
-
-    //Calls the Player Move function to let the player navigate
-    PlayerMove(move,PlayX,PlayY,CurrentExits,Map);
-
-    //Displays the tile that the player is on
-    DisplayTile(Map[PlayX][PlayY]);
-
-    //checks for the win flag
-    if(Map[PlayX][PlayY].size() == 5){
-        win=1;
-        break;
+void GenerateWarden(vector<vector<vector<bool>>> &Map){
+    for(int i=9;i>=0;i--){
+        for(int j=9;j>=0;j--){
+            //gives the win flag to the first initialized tile it finds
+            if(!IsTileUninitialized(Map[i][j])){
+                // 1/20 chance of a Warden being placed
+                if(!Map[i][j][6] && !Map[i][j][4]){
+                if(rand()%20 == 0){
+                    Map[i][j][5] = 1;
+                } else {
+                    Map[i][j][5] = 0;
+                    }
+                } else {
+                Map[i][j][5] = 0;
+                }
+            }
+        }
     }
-    }
-
-    cout<<"You win";
-    return 0;
 }

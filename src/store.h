@@ -10,6 +10,13 @@ class Store
 private:
     // variables
     int itemChoice;
+    
+public:
+    // declare the functions 
+    bool StoreMenu();
+    void PurchaseCC();
+    void PurchaseSCC();
+    void showInventory();
 
 public:
     // declare the functi9ns
