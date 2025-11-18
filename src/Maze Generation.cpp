@@ -2,6 +2,7 @@
 #include <vector>
 #include <ctime>
 #include <cstdlib>
+#include "Maze Generation.h"
 using namespace std;
 
 
@@ -120,55 +121,6 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
     } 
 }
 
-void PlayerMove(int &move, int &PlayX, int &PlayY, vector<bool> CurrentExits, vector<vector<vector<bool>>> &Map){
-
-    //Shows all eligible moves to the player
- if(CurrentExits[0]){
-        cout<<"1: Move Left"<<endl;
-    }
-    if(CurrentExits[1]){
-        cout<<"2: Move Down"<<endl;
-    }
-    if(CurrentExits[2]){
-        cout<<"3: Move Right"<<endl;
-    }
-    if(CurrentExits[3]){
-        cout<<"4: Move Up"<<endl;
-    }
-
-    cin>>move;
-
-
-    //checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
-    //all exits should be because of FixWalls()
-    if(move == 1){
-        if(!Map[PlayX][PlayY][0] || !Map[PlayX][PlayY-1][2]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayY --;
-        }
-    } else if (move == 2){
-        if(!Map[PlayX][PlayY][1] || !Map[PlayX+1][PlayY][3]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayX ++;
-        }
-    } else if (move == 3){
-        if(!Map[PlayX][PlayY][2] || !Map[PlayX][PlayY+1][0]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayY ++;
-        }
-    } else if (move == 4){
-        if(!Map[PlayX][PlayY][3] || !Map[PlayX-1][PlayY][1]){
-            cout<<"There's a wall blocking your path"<<endl;
-        } else {
-       PlayX --;
-        }
-    } else {
-        cout<<"Please Enter A Valid Direction";
-    }
-}
 
 void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map, vector<bool> &EligibleExits,int &x, int &y, vector<vector<int>> &pathStack){
     int ForcedExit = 3;

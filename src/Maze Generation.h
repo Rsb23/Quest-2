@@ -1,5 +1,6 @@
 #ifndef MAZEGENERATION_H
 #define MAZEGENERATION_H
+#include "store.h"
 #include <vector>
 
 void GenerateWarden(std::vector<std::vector<std::vector<bool>>> &Map);
@@ -11,7 +12,7 @@ void GenerateMaze(std::vector<bool> &CurrentExits, std::vector<std::vector<std::
 void SelectTile(std::vector<bool> EligibleExits, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &x, int &y, int &ForcedExit);
 void DisplayTile(std::vector<bool> exits);
 bool IsTileUninitialized(const std::vector<bool> &tile_exits);
-void PlayerMove(int &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map);
+void PlayerMove(int &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, Store store);
 std::vector<bool> CreateTile();
 std::vector<bool> InitialTile();
 

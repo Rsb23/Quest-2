@@ -75,19 +75,3 @@ void Store::showInventory() {
     std::cout << "Cue Cards: " << cueCardCount << std::endl;
     std::cout << "Supreme Cue Cards: " << supremeCardCount << std::endl;
 }
-
-int main() 
-{
-    Store myStore;
-    while (myStore.StoreMenu()) {
-        char again;
-        std::cout << "Return to store? (Y/N): ";
-        std::cin >> again;
-        
-        if (again == 'n' || again == 'N') {
-            std::cout << "Thank you for visiting the store, come again soon!" << std::endl;
-            break;
-        }
-    }
-    return 0;
-}

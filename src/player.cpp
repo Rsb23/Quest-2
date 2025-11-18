@@ -1,10 +1,11 @@
 #include "player.h"
+#include "store.h"
 
-void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map,int &PrevX, int &PrevY){
+void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map,int &PrevX, int &PrevY, Store store){
     PrevY = PlayY;
     PrevX = PlayX;
     //Shows all moves to the player
-    std::cout<<"W: Move Up\n" << "A: Move Left\n" << "S: Move Down\n" << "D: Move Right\n";
+    std::cout<<"W: Move Up\n" << "A: Move Left\n" << "S: Move Down\n" << "D: Move Right\n"<<"B: Open Shop\n";
 
     std::cin>>move;
 
@@ -35,6 +36,8 @@ void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExi
         } else {
        PlayX --;
         }
+    } else if(move == 'b'){
+        store.StoreMenu();
     } else {
         std::cout<<"Please Enter A Valid Direction";
     }

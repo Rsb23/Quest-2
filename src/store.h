@@ -13,7 +13,7 @@ private:
     int supremeCardCount{0};
     
 public:
-    // declare the functi9ns 
+    // declare the functions 
     bool StoreMenu();
     void PurchaseCC();
     void PurchaseSCC();

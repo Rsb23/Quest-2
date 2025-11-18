@@ -1,7 +1,7 @@
-#include "player.h"
-#include"Maze Generation.h"
+
 #include "Maze Generation.cpp"
 #include "player.cpp"
+#include "store.cpp"
 #include<vector>
 #include<iostream>
 using namespace std;
@@ -9,6 +9,7 @@ using namespace std;
 int main()
 {
     srand(time(0));
+    Store store;
     char move;
     char engage;
     bool win = 0;
@@ -58,7 +59,7 @@ int main()
     CurrentExits = Map[PlayX][PlayY];
 
     //Calls the Player Move function to let the player navigate
-    PlayerMove(move,PlayX,PlayY,CurrentExits,Map, PrevX, PrevY);
+    PlayerMove(move,PlayX,PlayY,CurrentExits,Map, PrevX, PrevY, store);
 
     //Displays the tile that the player is on
     DisplayTile(Map[PlayX][PlayY]);
