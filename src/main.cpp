@@ -125,8 +125,6 @@ int main()
         // Create Store class
         Store _store;
 
-        // Initialize map
-
         // Main game loop
         while (true)
         {
@@ -183,11 +181,8 @@ int main()
                     {
                         PlayX = PrevX;
                         PlayY = PrevY;
-                        DisplayTile(Map[PlayX][PlayY]);
                     };
                 }
-
-                DisplayTile(Map[PlayX][PlayY]);
             }
             else
             {
