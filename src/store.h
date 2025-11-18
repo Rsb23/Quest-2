@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 class Store
 {
 private:

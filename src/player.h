@@ -8,43 +8,42 @@
 class Player
 {
 private:
-    std::string desc{""}; // randomly picked from pre-determined array
-    std::string possibleDesc[5];
-    int playerClass{0}; // 1 - Bulwark The Guardian, 2 - Aegis The Ravager, 3 - Ronan The Trickster
+    std::string desc{""}; // 1 - Bulwark The Guardian, 2 - Aegis The Ravager, 3 - Ronan The Trickster
     int points{0};
     int ccCount{0};
     int sccCount{0};
     int gatesCompletedCount{0};
-    std::vector<int> gatesCompleted;
+    int wardensCompletedCount{0};
 
     int xPos{0};
     int yPos{0};
 
 public:
-    Player(int playerClass, int startingPoints);
     std::string getDesc();
     void setDesc(std::string newDesc);
-
-    int getPlayerClass();
-    void setPlayerClass(int newPlayerClass);
 
     int getPoints();
     void setPoints(int newPoints);
     void adjustPoints(int amount); // can be positive or negative
 
     int getCueCardCount();
-    void setCueCardCount(int newSupremeCueCardCount);
+    void setCueCardCount(int newCueCardCount);
 
     int getSupremeCueCardCount();
     void setSupremeCueCardCount(int newSupremeCueCardCount);
 
     int getGatesCompletedCount();
     void setGatesCompletedCount(int newGatesCompletedCount);
+
     void incrementGatesCompletedCount();
 
-    void resetGatesCompleted(); // resets count and vector
-    void addCompletedGate(int gateNum);
-    void randomlySetDesc();
+    int getWardensCompletedCount();
+    void setWardensCompletedCount(int newWardensCompletedCount);
+
+    void incrementWardensCompletedCount();
+
+    void encounterGate();
+    void encounterWarden();
 
     // player movement functions
     void setXPos(int newXPos);

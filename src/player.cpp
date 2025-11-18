@@ -1,9 +1,87 @@
 #include "player.h"
+#include "gate.h"
+#include "warden.h"
 
-Player::Player(std::string playerClass, int startingPoints)
-{
-    if (playerClass == "")
+
+// getters and setterse
+std::string Player::getDesc(){
+    return desc;
 }
+
+void Player::setDesc(std::string newDesc){
+    desc = newDesc;
+}
+
+int Player::getPoints(){
+    return points;
+}
+
+void Player::setPoints(int newPoints){
+    points = newPoints;
+}
+
+void Player::adjustPoints(int amount){
+    points += amount;
+}
+
+int Player::getCueCardCount(){
+    return ccCount;
+}
+
+void Player::setCueCardCount(int newCueCardCount){
+    ccCount = newCueCardCount;
+}
+
+int Player::getSupremeCueCardCount(){
+    return sccCount;
+}
+
+void Player::setSupremeCueCardCount(int newSupremeCueCardCount){
+    sccCount = newSupremeCueCardCount;
+}
+
+int Player::getGatesCompletedCount(){
+    return gatesCompletedCount;
+}
+
+void Player::setGatesCompletedCount(int newGatesCompletedCount){
+    gatesCompletedCount = newGatesCompletedCount;
+}
+
+void Player::incrementGatesCompletedCount(){
+    gatesCompletedCount++;
+}
+
+int Player::getWardensCompletedCount(){
+    return wardensCompletedCount;
+}
+
+void Player::setWardensCompletedCount(int newWardensCompletedCount){
+    wardensCompletedCount = newWardensCompletedCount;
+}
+
+void Player::incrementWardensCompletedCount(){
+    wardensCompletedCount++;
+}
+
+void Player::encounterGate(){
+    std::cout << "You have encountered an old gate. It's strong, oak wood creaks in the breeze.\n";
+    std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
+
+    Gate _gate;
+
+    _gate.loadPrompt(*this);
+}
+
+void Player::encounterWarden(){
+    std::cout << "You encounter a Warden guarding the passage. It's leathery skin groans under the stress of keeping it's diseased organs together.\n";
+    std::cout << "The Warden asks you three questions: \n\n";
+
+    Warden _warden;
+
+    _warden.loadPrompt(*this);
+}
+
 // player movement functions
 void Player::setXPos(int newXPos)
 {
