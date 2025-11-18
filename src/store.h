@@ -2,15 +2,14 @@
 #define STORE_H
 
 #include <iostream>
+#include "player.h"
 
-class Store{
+
+class Store
+{
 private:
-    //variables 
+    // variables
     int itemChoice;
-    int itemCount;
-    int points{50}; // I set at 50 for testing, will change back for integration
-    int cueCardCount{0};
-    int supremeCardCount{0};
     
 public:
     // declare the functions 
@@ -19,10 +18,12 @@ public:
     void PurchaseSCC();
     void showInventory();
 
-    // getters and setters
-    int getPoints() const { return points; }
-    void setPoints(int points); 
-    
+public:
+    // declare the functi9ns
+    void storeMenu(Player &player);
+    void purchaseCC(Player &player);
+    void purchaseSCC(Player &player);
+    void showInventory(Player &player);
 };
 
 #endif
