@@ -73,6 +73,7 @@ int main()
         } else {
             PlayX = PrevX;
             PlayY = PrevY;
+            DisplayTile(Map[PlayX][PlayY]);
         }
 
 
@@ -94,6 +95,7 @@ int main()
         } else {
             PlayX = PrevX;
             PlayY = PrevY;
+            DisplayTile(Map[PlayX][PlayY]);
         }
 
 

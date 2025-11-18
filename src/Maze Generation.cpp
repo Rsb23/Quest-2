@@ -54,8 +54,19 @@ void DisplayTile(vector<bool> exits) {
             } if(exits[3] == 1 && ((j==4||j==5||j==6)&&(i<=6))){
                 Display[i][j] = ".";
             }
+            if(exits[4]){
+                for(int i=4; i<=6; i++){
+                    for(int j=4; j<=6; j++){
+                Display[i][j] = "#";
+                }
+            }
+            } else if (exits[5]){
+                Display[5][5] = "骨";
+            } else {
             Display[5][5] = "@";
+            }
             cout << Display[i][j] << " "; 
+
         }
 
         cout << endl; 
@@ -384,7 +395,7 @@ void GenerateWarden(vector<vector<vector<bool>>> &Map){
             //gives the win flag to the first initialized tile it finds
             if(!IsTileUninitialized(Map[i][j])){
                 // 1/20 chance of a Warden being placed
-                if(!Map[i][j][6]){
+                if(!Map[i][j][6] && !Map[i][j][4]){
                 if(rand()%20 == 0){
                     Map[i][j][5] = 1;
                 } else {
