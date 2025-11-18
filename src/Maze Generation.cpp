@@ -8,13 +8,13 @@ using namespace std;
 //Sets the exits for the starting tile
 vector<bool> InitialTile(){
     vector<bool> exits;
-    exits = {0,1,1,0};
+    exits = {0,1,1,0,0,0,0};
     return exits;
 }
 
 //randomly generates exits when called
 vector<bool> CreateTile(){
-    vector<bool> exits = {0,0,0,0};
+    vector<bool> exits = {0,0,0,0,0,0,0};
     for (int i = 0; i < 4 ; i++){
         exits[i] = rand()%2;
     }
@@ -350,71 +350,50 @@ void GenerateFinish(vector<vector<vector<bool>>> &Map){
         for(int j=9;j>=0;j--){
             //gives the win flag to the first initialized tile it finds
             if(!IsTileUninitialized(Map[i][j])){
-                //sets the win flag by making one tile have more size than normal
-                Map[i][j].push_back(true);
+                //sets the win flag
+                Map[i][j][6] = 1;
                 return;
             }
         }
     }
 }
 
-int main()
-{
-    srand(time(0));
-    int move = 0;
-    bool win = 0;
-    int y = 0; // Current column index (0-9)
-    int x = 0; // Current row index (0-9)
-    int PlayX = x;
-    int PlayY = y;
-    vector<bool> CurrentExits;
-    vector<bool> EligibleExits;
-    // Add a stack for backtracking: stores {x, y} pairs
-    vector<vector<int>> pathStack;
-
-    // A counter to track how many tiles have been initialized (for GenerateMissingPaths)
-    int completed_tiles_count = 0; 
-    
-    // 10 x 10 x 4 3d vector for the map
-    vector<vector<vector<bool>>> Map(10, vector<vector<bool>>(10,vector<bool>(4,0)));
-
-    Map[x][y] = InitialTile(); 
-    pathStack.push_back({x, y}); // Push starting tile onto the stack
-    completed_tiles_count++; // Start tile is the first completed tile
-
-    // Loop continues until 10 tiles are completed by the DFS algorithm
-    GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
-    
-    // Call the GenerateMissingPaths function to fill in any uninitialized areas
-    for(int i = 0; i < 100; i++){
-    GenerateMissingPaths(Map, completed_tiles_count); 
-    //Places walls at locations where exits don't line up
-    FixWalls(Map);
+void GenerateGates(vector<vector<vector<bool>>> &Map){
+    for(int i=9;i>=0;i--){
+        for(int j=9;j>=0;j--){
+            //Makes sure the tiles are initialized before placing a gate there
+            if(!IsTileUninitialized(Map[i][j])){
+                //1/5 chance of a gate being placed
+                if(!Map[i][j][6]){
+                    if(rand()%5 == 0){
+                        Map[i][j][4] = 1;
+                    } else {
+                        Map[i][j][4] = 0;
+                    }
+                } else {
+                    Map[i][j][4] = 0;
+                }
+            }
+        }
     }
+}
 
-    //Make the win exist
-    GenerateFinish(Map);
-    //Displays the inital tile before the game loop starts
-    DisplayTile(Map[PlayX][PlayY]);
-
-    //Main game loop
-    while(win == 0){
-    //Tracks current tiles exits
-    CurrentExits = Map[PlayX][PlayY];
-
-    //Calls the Player Move function to let the player navigate
-    PlayerMove(move,PlayX,PlayY,CurrentExits,Map);
-
-    //Displays the tile that the player is on
-    DisplayTile(Map[PlayX][PlayY]);
-
-    //checks for the win flag
-    if(Map[PlayX][PlayY].size() == 5){
-        win=1;
-        break;
+void GenerateWarden(vector<vector<vector<bool>>> &Map){
+    for(int i=9;i>=0;i--){
+        for(int j=9;j>=0;j--){
+            //gives the win flag to the first initialized tile it finds
+            if(!IsTileUninitialized(Map[i][j])){
+                // 1/20 chance of a Warden being placed
+                if(!Map[i][j][6]){
+                if(rand()%20 == 0){
+                    Map[i][j][5] = 1;
+                } else {
+                    Map[i][j][5] = 0;
+                    }
+                } else {
+                Map[i][j][5] = 0;
+                }
+            }
+        }
     }
-    }
-
-    cout<<"You win";
-    return 0;
 }

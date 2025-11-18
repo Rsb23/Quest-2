@@ -1,87 +1,41 @@
 #include "player.h"
 
-// getters and setters
-void Player::setXPos(int newXPos)
-{
-    xPos = newXPos;
-}
-int Player::getXPos()
-{
-    return xPos;
-}
-void Player::setYPos(int newYPos)
-{
-    yPos = newYPos;
-}
-int Player::getYPos()
-{
-    return yPos;
-}
-void Player::move(std::string dir, std::vector<std::vector<std::string>> &map)
-{
-    // "moves" character based on input, doesn't move if it detects a wall, and can be changed to start asking questions when detecting a guard
-    if (dir == "w")
-    {
-        if (map[xPos - 1][yPos] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
+void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map,int &PrevX, int &PrevY){
+    PrevY = PlayY;
+    PrevX = PlayX;
+    //Shows all moves to the player
+    std::cout<<"W: Move Up\n" << "A: Move Left\n" << "S: Move Down\n" << "D: Move Right\n";
+
+    std::cin>>move;
+
+
+    //checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
+    //all exits should be because of FixWalls()
+    if(move == 'a'){
+        if(!Map[PlayX][PlayY][0] || !Map[PlayX][PlayY-1][2]){
+            std::cout<<"There's a wall blocking your path"<<std::endl;
+        } else {
+       PlayY --;
         }
-        else if (map[xPos - 1][yPos] == "X")
-        {
-            std::cout << "It's a guard!: (Placeholder question)" << "\n";
+    } else if (move == 's'){
+        if(!Map[PlayX][PlayY][1] || !Map[PlayX+1][PlayY][3]){
+            std::cout<<"There's a wall blocking your path"<<std::endl;
+        } else {
+       PlayX ++;
         }
-        else
-        {
-            xPos--;
+    } else if (move == 'd'){
+        if(!Map[PlayX][PlayY][2] || !Map[PlayX][PlayY+1][0]){
+            std::cout<<"There's a wall blocking your path"<<std::endl;
+        } else {
+       PlayY ++;
         }
-    }
-    else if (dir == "s")
-    {
-        if (map[xPos + 1][yPos] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
+    } else if (move == 'w'){
+        if(!Map[PlayX][PlayY][3] || !Map[PlayX-1][PlayY][1]){
+            std::cout<<"There's a wall blocking your path"<<std::endl;
+        } else {
+       PlayX --;
         }
-        else if (map[xPos + 1][yPos] == "X")
-        {
-            std::cout << "It's a guard!: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            xPos++;
-        }
-    }
-    else if (dir == "a")
-    {
-        if (map[xPos][yPos - 1] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
-        }
-        else if (map[xPos][yPos - 1] == "X")
-        {
-            std::cout << "It's a guard!: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            yPos--;
-        }
-    }
-    else if (dir == "d")
-    {
-        if (map[xPos][yPos + 1] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
-        }
-        else if (map[xPos][yPos + 1] == "X")
-        {
-            std::cout << "It's a guard: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            yPos++;
-        }
-    }
-    else
-    {
-        std::cout << "Invalid character entered" << "\n";
+    } else {
+        std::cout<<"Please Enter A Valid Direction";
     }
 }

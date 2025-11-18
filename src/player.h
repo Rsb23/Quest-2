@@ -35,12 +35,7 @@ public:
     void setPoints(int newPoints);
     void adjustPoints(int amount); // can be positive or negative
 
-    // player movement functions
-    void setXPos(int newXPos);
-    int getXPos();
-    void setYPos(int newYPos);
-    int getYPos();
-    void move(std::string dir, std::vector<std::vector<std::string>> &map);
+    // player movement function
 };
 
 #endif
