@@ -3,21 +3,26 @@
 
 #include <string>
 
-class Gate{
-private: 
-    std::string prompt {""};
-    bool promptIsTrue {true};
-    int pointsValue {10};
-    bool completed {false};
+class Gate
+{
+protected:
+    std::string prompt{""};
+    int pointsValue{5};
+    bool completed{false};
+    int correctAnswer{-1};
+
 public:
+    // getters & setters
     std::string getPrompt();
     void setPrompt(std::string newPrompt);
-    bool getPromptTruth();
-    void setPromptTruth(bool newTruth);
     int getPointsValue();
     void setPointsValue(int newPointsValue);
     bool getCompleted();
     void setCompleted(bool newCompleted);
+    int getCorrectAnswer();
+    void setCorrectAnswer(int newCorrectAnswer);
+
+    void loadPrompt();
 };
 
 #endif

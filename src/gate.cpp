@@ -1,26 +1,46 @@
 #include "gate.h"
 
-std::string Gate::getPrompt(){
-    return prompt;
+std::string Gate::getPrompt()
+{
+        return prompt;
 }
-void Gate::setPrompt(std::string newPrompt){
+void Gate::setPrompt(std::string newPrompt)
+{
         prompt = newPrompt;
 }
-bool Gate::getPromptTruth(){
-        return promptIsTrue;
-}
-void Gate::setPromptTruth(bool newTruth){
-        promptIsTrue = newTruth;
-}
-int Gate::getPointsValue(){
+int Gate::getPointsValue()
+{
         return pointsValue;
 }
-void Gate::setPointsValue(int newPointsValue){
+void Gate::setPointsValue(int newPointsValue)
+{
         pointsValue = newPointsValue;
 }
-bool Gate::getCompleted(){
+bool Gate::getCompleted()
+{
         return completed;
 }
-void Gate::setCompleted(bool newCompleted){
+void Gate::setCompleted(bool newCompleted)
+{
         completed = newCompleted;
+}
+
+int Gate::getCorrectAnswer()
+{
+        return correctAnswer;
+}
+
+void Gate::setCorrectAnswer(int newCorrectAnswer)
+{
+        correctAnswer = newCorrectAnswer;
+}
+
+void Gate::loadPrompt()
+{
+        // seed RNG beforehand
+        // min + (rand() % (max - min + 1))
+
+        // choose 3 untruthful statements
+
+        // choose 1 truthful statement
 }

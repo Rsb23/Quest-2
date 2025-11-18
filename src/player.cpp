@@ -1,6 +1,10 @@
 #include "player.h"
 
-// getters and setters
+Player::Player(std::string playerClass, int startingPoints)
+{
+    if (playerClass == "")
+}
+// player movement functions
 void Player::setXPos(int newXPos)
 {
     xPos = newXPos;
@@ -17,10 +21,10 @@ int Player::getYPos()
 {
     return yPos;
 }
-void Player::move(std::string dir, std::vector<std::vector<std::string>> &map)
+void Player::move(char dir, std::vector<std::vector<std::string>> &map)
 {
     // "moves" character based on input, doesn't move if it detects a wall, and can be changed to start asking questions when detecting a guard
-    if (dir == "w")
+    if (dir == 'w')
     {
         if (map[xPos - 1][yPos] == "*")
         {
@@ -35,7 +39,7 @@ void Player::move(std::string dir, std::vector<std::vector<std::string>> &map)
             xPos--;
         }
     }
-    else if (dir == "s")
+    else if (dir == 's')
     {
         if (map[xPos + 1][yPos] == "*")
         {
@@ -50,7 +54,7 @@ void Player::move(std::string dir, std::vector<std::vector<std::string>> &map)
             xPos++;
         }
     }
-    else if (dir == "a")
+    else if (dir == 'a')
     {
         if (map[xPos][yPos - 1] == "*")
         {
@@ -65,7 +69,7 @@ void Player::move(std::string dir, std::vector<std::vector<std::string>> &map)
             yPos--;
         }
     }
-    else if (dir == "d")
+    else if (dir == 'd')
     {
         if (map[xPos][yPos + 1] == "*")
         {
