@@ -4,16 +4,18 @@ void Store::storeMenu()
 {
     while (true)
     {
+        // gives user options to choose from
         std::cout << "\nWelcome to the Store!" << std::endl;
         std::cout << "1: Purchase a Cue Card (10 pts)" << std::endl;
         std::cout << "2: Purchase a Supreme Cue Card (30 pts)" << std::endl;
         std::cout << "3: Check inventory" << std::endl;
-        std::cout << "4: Exit\n"
-                  << std::endl;
+        std::cout << "4: Exit\n" << std::endl;
 
+        //prompts user for choice
         std::cout << "Enter your choice: ";
         std::cin >> itemChoice;
 
+        // case checks bring the user back to the store after every function
         if (itemChoice == 1)
         {
             if (points < 10)
