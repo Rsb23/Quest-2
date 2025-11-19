@@ -51,7 +51,7 @@ public:
 
     bool questionUsedPrev(std::vector<std::vector<int>> usedQuestions, int newPerson, int newQ);
 
-    void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
 };
 
 #endif
