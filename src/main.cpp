@@ -1,11 +1,3 @@
-/*
-#include "maze.h"
-#include "player.h"
-#include "store.h"
-#include "gate.h"
-#include "warden.h"
-*/
-
 #include "maze.cpp"
 #include "player.cpp"
 #include "store.cpp"
@@ -140,7 +132,7 @@ int main()
             }
         }*/
 
-        // Main game loop
+        //Main game loop
         while (true)
         {
             char input{'e'};
