@@ -2,172 +2,139 @@
 
 Warden::Warden()
 {
-        pointsValue = 15;
+	pointsValue = 5; // per question, so three questions by default 5 pts * 3 questions = 15 pts total
+	assignTruthfulness();
 }
 
 bool Warden::getIsTruthful()
 {
-        return isTruthful;
+	return isTruthful;
 }
 
 void Warden::setIsTruthful(bool inputIsTruthful)
 {
-        isTruthful = inputIsTruthful;
+	isTruthful = inputIsTruthful;
 }
 
 void Warden::assignTruthfulness()
 {
-        setIsTruthful(makeRandomNum(0, 1));
+	setIsTruthful(makeRandomNum(0, 1));
+}
+
+std::string Warden::getQuestion(int person, int q)
+{
+	switch (person)
+	{
+	case 0:
+		return tylerQuestions[q];
+	case 1:
+		return francisQuestions[q];
+	case 2:
+		return gauravQuestions[q];
+	case 3:
+		return nosaQuestions[q];
+	case 4:
+		return liamQuestions[q];
+	case 5:
+		return stefanQuestions[q];
+	case 6:
+		return avneetQuestions[q];
+	}
+
+	return "";
+}
+
+std::string Warden::getAnswer(int person, int q)
+{
+	switch (person)
+	{
+	case 0:
+		return isTruthful ? tylerAns[q] : tylerFalseAns[q];
+	case 1:
+		return isTruthful ? francisAns[q] : francisFalseAns[q];
+	case 2:
+		return isTruthful ? gauravAns[q] : gauravFalseAns[q];
+	case 3:
+		return isTruthful ? nosaAns[q] : nosaFalseAns[q];
+	case 4:
+		return isTruthful ? liamAns[q] : liamFalseAns[q];
+	case 5:
+		return isTruthful ? stefanAns[q] : stefanFalseAns[q];
+	case 6:
+		return isTruthful ? avneetAns[q] : avneetFalseAns[q];
+	}
+
+	return "";
+}
+
+bool Warden::questionUsedPrev(std::vector<std::vector<int>> usedQuestions, int newPerson, int newQ){
+	for (int i {0}; i < usedQuestions.size(); i++){
+		if (usedQuestions[i][0] == newPerson && usedQuestions[i][1] == newQ)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Warden::loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
 {
-        int questionsCorrect{0};
+	int questionsCorrect{0};
+	int questionsCount{3};
+	std::vector<std::vector<int>> usedQuestions; // inner vector contains two int: person, questionChoice
 
-        for (int i{0}; i < 3; i++)
-        {
-                int person{makeRandomNum(0, 6)}; // 0 - Tyler, 1 - Francis, 2 - Gaurav, 3 - Nosa, 4 - Liam, 5 - Stefan, 6 - Avneet
-                int questionChoice{makeRandomNum(0, 2)};
+	for (int i{0}; i < questionsCount; i++)
+	{
+		int person {0};
+		int questionChoice {0};
 
-                if (isTruthful)
-                {
-                        if (person == 0)
-                        {
-                                std::cout << "You ask: " << tylerQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << tylerAns[questionChoice] << "\n";
-                        }
-                        else if (person == 1)
-                        {
-                                std::cout << "You ask: " << francisQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << francisAns[questionChoice] << "\n";
-                        }
-                        else if (person == 2)
-                        {
-                                std::cout << "You ask: " << gauravQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << gauravAns[questionChoice] << "\n";
-                        }
-                        else if (person == 3)
-                        {
-                                std::cout << "You ask: " << nosaQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << nosaAns[questionChoice] << "\n";
-                        }
-                        else if (person == 4)
-                        {
-                                std::cout << "You ask: " << liamQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << liamAns[questionChoice] << "\n";
-                        }
-                        else if (person == 5)
-                        {
-                                std::cout << "You ask: " << stefanQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << stefanAns[questionChoice] << "\n";
-                        }
-                        else if (person == 6)
-                        {
-                                std::cout << "You ask: " << avneetQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << avneetAns[questionChoice] << "\n";
-                        }
+		while (true){
+			person = makeRandomNum(0, 6); // 0 - Tyler, 1 - Francis, 2 - Gaurav, 3 - Nosa, 4 - Liam, 5 - Stefan, 6 - Avneet
+			questionChoice = makeRandomNum(0, 2);
 
-                        char res{'n'};
+			// logic for making sure questions are not repeated
+			if (!questionUsedPrev(usedQuestions, person, questionChoice)){
+				usedQuestions.push_back({});
+				usedQuestions[i].push_back(person);
+				usedQuestions[i].push_back(questionChoice);
+				break;
+			}
+		}
 
-                        std::cout << "Is the Warden telling the truth (y/n)?: ";
-                        std::cin >> res;
+		std::cout << "You ask: " << getQuestion(person, questionChoice) << "\n";
+		std::cout << "The Warden responds: " << getAnswer(person, questionChoice) << "\n";
 
-                        if (res == 'y')
-                        {
-                                std::cout << "That's correct!\n";
-                                std::cout << "The Warden's decaying skin crumbles into a heap of dust, blown away in the passageway's breeze.\n";
+		char res{'n'};
 
-                                std::cout << "Points Increase: +" << pointsValue << "pts\n";
+		std::cout << "Is the Warden telling the truth (y/n)?: ";
+		std::cin >> res;
 
-                                Map[PlayX][PlayY][5] = 0;
-                                setCompleted(true);
-                                _player.adjustPoints(pointsValue);
-                                questionsCorrect++;
-                                continue;
-                        }
-                        else if (res == 'n')
-                        {
-                                std::cout << "That's incorrect\n!";
-                                std::cout << "The Warden lets out a bellowing scream as the smell of decaying flesh arises from his mouth.\n";
+		bool correct = (isTruthful && res == 'y') || (!isTruthful && res == 'n');
 
-                                std::cout << "Points Decrease: -25\% of current points = " << _player.getPoints() << "*" << "0.75 = " << std::floor(_player.getPoints() * 0.75f) << "\n";
-                                _player.setPoints(std::floor(_player.getPoints() * 0.75f));
-                        }
-                        else
-                        {
-                                std::cout << "The Warden angers at your lack of a coherent response!\n";
-                                break;
-                        }
-                }
-                else
-                {
-                        if (person == 0)
-                        {
-                                std::cout << "You ask: " << tylerQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << tylerFalseAns[questionChoice] << "\n";
-                        }
-                        else if (person == 1)
-                        {
-                                std::cout << "You ask: " << francisQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << francisFalseAns[questionChoice] << "\n";
-                        }
-                        else if (person == 2)
-                        {
-                                std::cout << "You ask: " << gauravQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << gauravFalseAns[questionChoice] << "\n";
-                        }
-                        else if (person == 3)
-                        {
-                                std::cout << "You ask: " << nosaQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << nosaFalseAns[questionChoice] << "\n";
-                        }
-                        else if (person == 4)
-                        {
-                                std::cout << "You ask: " << liamQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << liamFalseAns[questionChoice] << "\n";
-                        }
-                        else if (person == 5)
-                        {
-                                std::cout << "You ask: " << stefanQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << stefanFalseAns[questionChoice] << "\n";
-                        }
-                        else if (person == 6)
-                        {
-                                std::cout << "You ask: " << avneetQuestions[questionChoice] << "\n";
-                                std::cout << "The Warden responds: " << avneetFalseAns[questionChoice] << "\n";
-                        }
+		if (correct)
+		{
+			std::cout << "That's correct!\n";
+			std::cout << "The Warden's decaying skin crumbles into a heap of dust, blown away in the passageway's breeze.\n";
 
-                        char res{'n'};
+			std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-                        std::cout << "Is the Warden telling the truth (y/n)?: ";
-                        std::cin >> res;
-
-                        if (res == 'n')
-                        {
-                                std::cout << "That's correct!\n";
-                                std::cout << "The Warden's decaying skin crumbles into a heap of dust, blown away in the passageway's breeze.\n";
-
-                                std::cout << "Points Increase: +" << pointsValue << "pts\n";
-
-                                                                Map[PlayX][PlayY][5] = 0;
-                                setCompleted(true);
-                                _player.adjustPoints(pointsValue);
-                                questionsCorrect++;
-                                continue;
-                        }
-                        else if (res == 'y')
-                        {
-                                std::cout << "That's incorrect\n!";
-                                std::cout << "The Warden lets out a bellowing scream as the smell of decaying flesh arises from his mouth.\n";
-
-                                std::cout << "Points Decrease: -25\% of current points = " << _player.getPoints() << "*" << "0.75 = " << std::floor(_player.getPoints() * 0.75f) << "\n";
-                                _player.setPoints(std::floor(_player.getPoints() * 0.75f));
-                        }
-                        else
-                        {
-                                std::cout << "The Warden angers at your lack of a coherent response!\n";
-                                break;
-                        }
-                }
-        }
+			Map[PlayX][PlayY][5] = 0;
+			setCompleted(true);
+			_player.adjustPoints(pointsValue);
+			questionsCorrect++;
+			continue;
+		}
+		else
+		{
+			std::cout << "That's incorrect\n!";
+			std::cout << "The Warden lets out a bellowing scream as the smell of decaying flesh arises from his mouth.\n";
+		}
+	}
+	if (questionsCorrect < 2)
+	{ // if majority of questions asked were incorrect
+		std::cout << "Unforunately, a majority of questions asked were incorrect (" << questionsCorrect << " / " << questionsCount << ")\n";
+		std::cout << "Points Decrease: -25\% of current points = " << _player.getPoints() << "*" << "0.75 = " << std::floor(_player.getPoints() * 0.75f) << "\n";
+		_player.setPoints(std::floor(_player.getPoints() * 0.75f));
+	}
 }

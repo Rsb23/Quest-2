@@ -39,12 +39,17 @@ private:
     std::vector<std::string> avneetFalseAns = {"Hockey", "Quebec City", "Twins"};
 
 public:
-    Warden(); // constructor used for setting points value
+    Warden(); // constructor used for setting points value and truthfulness
     // getters & setters
     bool getIsTruthful();
     void setIsTruthful(bool inputIsTruthful);
 
     void assignTruthfulness();
+
+    std::string getQuestion(int person, int q);
+    std::string getAnswer(int person, int q);
+
+    bool questionUsedPrev(std::vector<std::vector<int>> usedQuestions, int newPerson, int newQ);
 
     void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 };
