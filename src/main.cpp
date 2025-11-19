@@ -172,6 +172,7 @@ int main()
                     {
                         PlayX = PrevX;
                         PlayY = PrevY;
+                        DisplayTile(Map[PlayX][PlayY]);
                     }
                 }
 
@@ -190,6 +191,7 @@ int main()
                     {
                         PlayX = PrevX;
                         PlayY = PrevY;
+                        DisplayTile(Map[PlayX][PlayY]);
                     };
                 }
             }
