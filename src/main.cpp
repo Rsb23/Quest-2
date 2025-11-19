@@ -1,11 +1,3 @@
-/*
-#include "maze.h"
-#include "player.h"
-#include "store.h"
-#include "gate.h"
-#include "warden.h"
-*/
-
 #include "maze.cpp"
 #include "player.cpp"
 #include "store.cpp"
