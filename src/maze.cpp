@@ -1,4 +1,5 @@
 #include "maze.h"
+#include <queue>
 using namespace std;
 
 // Sets the exits for the starting tile
@@ -100,22 +101,38 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
         if (SelectedExit == 0)
         { // Left: y-- (horizontal)
             ForcedExit = 2;
-            y--;
+                if(y-1<0){
+                    
+                } else {
+                    y--;
+                }
         }
         else if (SelectedExit == 1)
         { // Bottom: x++ (vertical)
             ForcedExit = 3;
-            x++;
+                if(x+1>9){
+                    
+                } else {
+                    x++;
+                }
         }
         else if (SelectedExit == 2)
         { // Right: y++ (horizontal)
             ForcedExit = 0;
-            y++;
+                if(y+1<9){
+                    
+                } else {
+                    y++;
+                }
         }
         else if (SelectedExit == 3)
         { // Top: x-- (vertical)
             ForcedExit = 1;
-            x--;
+                if(x-1<0){
+                    
+                } else {
+                    x--;
+                }
         }
 
         vector<bool> RawExits = CreateTile();
@@ -150,7 +167,7 @@ void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map,
 {
     int ForcedExit = 3;
 
-    for (int q = 0; q < 10; q++)
+    for (int q = 0; q < 15; q++)
     {
 
         CurrentExits = Map[x][y];
@@ -213,7 +230,6 @@ void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map,
             if (pathStack.empty())
             {
                 // if this segment runs, that means all possible paths are filled and generation couldn't finish
-                // unlikely but possible
                 break; // Exit generation
             }
 
@@ -381,7 +397,7 @@ void GenerateFinish(vector<vector<vector<bool>>> &Map)
         for (int j = 9; j >= 0; j--)
         {
             // gives the win flag to the first initialized tile it finds
-            if (!IsTileUninitialized(Map[i][j]))
+            if (!IsTileUninitialized(Map[i][j]) && (!Map[i][j][6]))
             {
                 // sets the win flag
                 Map[i][j][6] = 1;
@@ -389,6 +405,84 @@ void GenerateFinish(vector<vector<vector<bool>>> &Map)
             }
         }
     }
+}
+
+bool isCompletable(vector<vector<vector<bool>>>& Map){
+    int finishX = -1;
+    int finishY = -1;
+
+    // Find location of exit
+    for(int i = 0; i<10; i++){
+        for(int j = 0; j<10; j++){
+            if(Map[i][j][6]){
+                finishX = i;
+                finishY = j;
+            }
+        }
+    }
+
+    int startX = 0;
+    int startY = 0;
+
+    vector<int> Pos = {startX, startY}; 
+
+    queue<vector<int>> q;
+    q.push(Pos);
+
+    // flag tiles that have been visited, so they aren't visited again
+    vector<vector<bool>> visited(10, vector<bool>(10, 0));
+    visited[startX][startY] = true; // Mark start tile as visited
+
+    // arrays to check movement directions
+    int Xdir[] = {0, 1, 0, -1};
+    int Ydir[] = {-1, 0, 1, 0};
+
+    // Preform search
+    // loop while there are areas to search
+    while(!q.empty()){
+        vector<int> current = q.front();
+        q.pop();
+        int x = current[0];
+        int y = current[1];
+
+        if(x == finishX && y == finishY){
+            return true;
+        }
+
+        // Check every exit of current tile
+        for(int i = 0; i < 4; i++){
+            // Check if there is an exit (wall) in this direction
+            if(Map[x][y][i]){
+                int nextX = x + Xdir[i];
+                int nextY = y + Ydir[i];
+                
+                // Check if the next coordinates are within the 10x10 grid boundaries
+                if (nextX < 0 || nextX >= 10 || nextY < 0 || nextY >= 10) {
+                    continue; // Skip this move, it goes out of bounds
+                }
+
+                //Check if the tile is uninitialized
+                if(IsTileUninitialized(Map[nextX][nextY])){
+                    continue;
+                }
+                
+                int opposite_exit = (i + 2) % 4;
+                // double check that exit is reciprocated
+                if (!Map[nextX][nextY][opposite_exit]) {
+                    continue; 
+                }
+
+                // Place the visited flag
+                if (!visited[nextX][nextY]) {
+                    visited[nextX][nextY] = true;
+                    q.push({nextX, nextY}); // Push the new coordinate vector
+                }
+            }
+        }
+    }
+
+    // return false if it fails to find the exit
+    return false;
 }
 
 void GenerateGates(vector<vector<vector<bool>>> &Map)

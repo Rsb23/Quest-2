@@ -33,32 +33,53 @@ int main()
     // A counter to track how many tiles have been initialized (for GenerateMissingPaths)
     int completed_tiles_count = 0;
 
-    // 10 x 10 x 4 3d vector for the map
+    // 10 x 10 x 7 3d vector for the map
     std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10, std::vector<bool>(7, 0)));
 
-    Map[x][y] = InitialTile();
-    pathStack.push_back({x, y}); // Push starting tile onto the stack
-    completed_tiles_count++;     // Start tile is the first completed tile
 
-    // Loop continues until 10 tiles are completed by the DFS algorithm
-    GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
 
-    // Call the GenerateMissingPaths function to fill in any uninitialized areas
-    for (int i = 0; i < 100; i++)
-    {
-        GenerateMissingPaths(Map, completed_tiles_count);
-        // Places walls at locations where exits don't line up
-        FixWalls(Map);
-    }
 
-    // Make the win exist
-    GenerateFinish(Map);
+        do{
+            //empty maze
+            for(int i = 0;i<10;i++){
+                for(int j = 0;j<10;j++){
+                    for(int k = 0; k < 7;k++){
+                        Map[i][j][k] = 0;
+                    }
+                }
+            }
+
+        Map[x][y] = InitialTile();
+        pathStack.push_back({x, y}); // Push starting tile onto the stack
+        completed_tiles_count++;     // Start tile is the first completed tile
+
+        GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
+
+            // Call the GenerateMissingPaths function to fill in any uninitialized areas
+        for (int i = 0; i < 100; i++)
+        {
+            GenerateMissingPaths(Map, completed_tiles_count);
+            // Places walls at locations where exits don't line up
+            FixWalls(Map);
+        }
+        // Make the win exist
+        GenerateFinish(Map);
+
+    }while(!isCompletable(Map));
+
+
     // Displays the inital tile before the game loop starts
     DisplayTile(Map[PlayX][PlayY]);
 
     // Generate enemy locations
     GenerateGates(Map);
     GenerateWarden(Map);
+
+        // Create player class (override above, player class types not yet implemented)
+        Player _player;
+
+        // Create Store class
+        Store _store;
 
     // Main game loop
     while (!win)
@@ -118,12 +139,6 @@ int main()
                 continue;
             }
         }*/
-
-        // Create player class (override above, player class types not yet implemented)
-        Player _player;
-
-        // Create Store class
-        Store _store;
 
         // Main game loop
         while (true)
@@ -190,13 +205,12 @@ int main()
             {
                 std::cout << "Please enter a valid option\n!";
             }
-        }
-
         // checks for the win flag
         if (Map[PlayX][PlayY][6])
         {
             win = true;
             break;
+        }
         }
     }
 
