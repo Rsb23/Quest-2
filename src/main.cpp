@@ -28,18 +28,19 @@ int main()
     // 10 x 10 x 7 3d vector for the map
     std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10, std::vector<bool>(7, 0)));
 
-
-
-
-        do{
-            //empty maze
-            for(int i = 0;i<10;i++){
-                for(int j = 0;j<10;j++){
-                    for(int k = 0; k < 7;k++){
-                        Map[i][j][k] = 0;
-                    }
+    do
+    {
+        // empty maze
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                for (int k = 0; k < 7; k++)
+                {
+                    Map[i][j][k] = 0;
                 }
             }
+        }
 
         Map[x][y] = InitialTile();
         pathStack.push_back({x, y}); // Push starting tile onto the stack
@@ -47,7 +48,7 @@ int main()
 
         GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
 
-            // Call the GenerateMissingPaths function to fill in any uninitialized areas
+        // Call the GenerateMissingPaths function to fill in any uninitialized areas
         for (int i = 0; i < 100; i++)
         {
             GenerateMissingPaths(Map, completed_tiles_count);
@@ -57,8 +58,7 @@ int main()
         // Make the win exist
         GenerateFinish(Map);
 
-    }while(!isCompletable(Map));
-
+    } while (!isCompletable(Map));
 
     // Displays the inital tile before the game loop starts
     DisplayTile(Map[PlayX][PlayY]);
@@ -67,11 +67,11 @@ int main()
     GenerateGates(Map);
     GenerateWarden(Map);
 
-        // Create player class (override above, player class types not yet implemented)
-        Player _player;
+    // Create player class (override above, player class types not yet implemented)
+    Player _player;
 
-        // Create Store class
-        Store _store;
+    // Create Store class
+    Store _store;
 
     // Main game loop
     while (!win)
@@ -132,7 +132,7 @@ int main()
             }
         }*/
 
-        //Main game loop
+        // Main game loop
         while (true)
         {
             char input{'e'};
@@ -199,12 +199,12 @@ int main()
             {
                 std::cout << "Please enter a valid option\n!";
             }
-        // checks for the win flag
-        if (Map[PlayX][PlayY][6])
-        {
-            win = true;
-            break;
-        }
+            // checks for the win flag
+            if (Map[PlayX][PlayY][6])
+            {
+                win = true;
+                break;
+            }
         }
     }
 
