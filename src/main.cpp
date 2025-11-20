@@ -1,5 +1,8 @@
 #include "maze.cpp"
 #include "player.cpp"
+#include "guardian.cpp"
+#include "ravager.cpp"
+#include "trickster.cpp"
 #include "store.cpp"
 #include "gate.cpp"
 #include "warden.cpp"
@@ -28,18 +31,19 @@ int main()
     // 10 x 10 x 7 3d vector for the map
     std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10, std::vector<bool>(7, 0)));
 
-
-
-
-        do{
-            //empty maze
-            for(int i = 0;i<10;i++){
-                for(int j = 0;j<10;j++){
-                    for(int k = 0; k < 7;k++){
-                        Map[i][j][k] = 0;
-                    }
+    do
+    {
+        // empty maze
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                for (int k = 0; k < 7; k++)
+                {
+                    Map[i][j][k] = 0;
                 }
             }
+        }
 
         Map[x][y] = InitialTile();
         pathStack.push_back({x, y}); // Push starting tile onto the stack
@@ -47,7 +51,7 @@ int main()
 
         GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
 
-            // Call the GenerateMissingPaths function to fill in any uninitialized areas
+        // Call the GenerateMissingPaths function to fill in any uninitialized areas
         for (int i = 0; i < 100; i++)
         {
             GenerateMissingPaths(Map, completed_tiles_count);
@@ -57,67 +61,67 @@ int main()
         // Make the win exist
         GenerateFinish(Map);
 
-    }while(!isCompletable(Map));
-
-
-    // Displays the inital tile before the game loop starts
-    DisplayTile(Map[PlayX][PlayY]);
+    } while (!isCompletable(Map));
 
     // Generate enemy locations
     GenerateGates(Map);
     GenerateWarden(Map);
 
-        // Create player class (override above, player class types not yet implemented)
-        Player _player;
+    Player * _player;
 
-        // Create Store class
-        Store _store;
-
-    // Main game loop
+    // Create Store class
+    Store _store;
+    
+    // player class selection loop
+    int classSel{0};
     while (!win)
     {
         // Tracks current tiles exits
         CurrentExits = Map[PlayX][PlayY];
 
-        // PLAYER CLASS TYPE NOT YET IMPLEMENTED
-        // Gets player class/type
-        // int classSelection{0};
-
-        /*
         while (true)
         {
-            std::cout << "Please Choose Player Class)\n";
+            std::cout << "Please Choose Player Class\n";
             std::cout << "Bulwark The Guardian\n"
-                    << "\"When the storm hits, Bulwark stands unbroken\"\n"
-                    << "Energy Shield - prevents loss of points when Gate OR Warden is incorrect\n"
-                    << "\n"
-                    << "Aegis The Ravager\n"
-                    << "\"Breaker of oaths, bearer of darkness\"\n"
-                    << "Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card\n"
-                    << "\n"
-                    << "Ronan The Trickster\n"
-                    << "\"Illusion is the truth you can't handle\"\n"
-                    << "Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them\n";
+                      << "\"When the storm hits, Bulwark stands unbroken\"\n"
+                      << "Energy Shield - prevents loss of points when Gate OR Warden is incorrect\n"
+                      << "\n"
+                      << "Aegis The Ravager\n"
+                      << "\"Breaker of oaths, bearer of darkness\"\n"
+                      << "Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card\n"
+                      << "\n";
+            /*
+            << "Ronan The Trickster\n"
+            << "\"Illusion is the truth you can't handle\"\n"
+            << "Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them\n";
+            */
 
-            std::cout << "Enter Class (1,2,3, or 4 to exit): ";
-            std::cin >> classSelection;
+            std::cout << "Enter Class (1, 2 or 3 to exit): ";
+            std::cin >> classSel;
 
-            if (classSelection)
+            if (classSel)
             {
-                if (classSelection == 1)
+                if (classSel == 1)
                 {
-                    Player test();
+                    _player = new Guardian();
                     break;
                 }
-                else if (classSelection == 2)
+                else if (classSel == 2)
                 {
-                    Player test();
+                    _player = new Ravager();
                     break;
                 }
-                else if (classSelection == 3)
+                /*
+                else if (classSel == 3)
                 {
-                    Player test();
+                    Trickster _player;
                     break;
+                }
+                */
+                else if (classSel == 3)
+                {
+                    std::cout << "Goodbye!\n";
+                    return 0;
                 }
                 else
                 {
@@ -130,9 +134,12 @@ int main()
                 std::cout << "Please make a selection\n!";
                 continue;
             }
-        }*/
+        }
 
-        //Main game loop
+        // displays start tile
+        DisplayTile(Map[PlayX][PlayY]);
+
+        // Main game loop
         while (true)
         {
             char input{'e'};
@@ -144,7 +151,7 @@ int main()
             if (input == 'b')
             {
                 Store _store;
-                _store.storeMenu(_player);
+                _store.storeMenu(*_player);
                 DisplayTile(Map[PlayX][PlayY]);
             }
             else if (input == 'e')
@@ -165,7 +172,7 @@ int main()
 
                     if (engage == 'y')
                     {
-                        _player.encounterGate(Map, PlayX, PlayY);
+                        _player->encounterGate(Map, PlayX, PlayY);
                         DisplayTile(Map[PlayX][PlayY]);
                     }
                     else
@@ -184,7 +191,7 @@ int main()
 
                     if (engage == 'y')
                     {
-                        _player.encounterWarden(Map, PlayX, PlayY);
+                        _player->encounterWarden(Map, PlayX, PlayY);
                         DisplayTile(Map[PlayX][PlayY]);
                     }
                     else
@@ -199,12 +206,12 @@ int main()
             {
                 std::cout << "Please enter a valid option\n!";
             }
-        // checks for the win flag
-        if (Map[PlayX][PlayY][6])
-        {
-            win = true;
-            break;
-        }
+            // checks for the win flag
+            if (Map[PlayX][PlayY][6])
+            {
+                win = true;
+                break;
+            }
         }
     }
 

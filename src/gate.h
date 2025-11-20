@@ -5,6 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include "player.h"
+#include "guardian.h"
+#include "trickster.h"
+#include "ravager.h"
 
 class Gate
 {
@@ -28,7 +32,12 @@ public:
     void setCompleted(bool newCompleted);
 
     int makeRandomNum(int min, int max);
-    void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+
+    // overloads for loadPrompt, need one per type of player, the version with the base class Player is not used, just for completeness and futureproofing
+    virtual void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    virtual void loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    virtual void loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    virtual void loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 };
 
 #endif

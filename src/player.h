@@ -7,8 +7,7 @@
 
 class Player
 {
-private:
-    std::string desc{""}; // 1 - Bulwark The Guardian, 2 - Aegis The Ravager, 3 - Ronan The Trickster
+protected:
     int points{0};
     int ccCount{0};
     int sccCount{0};
@@ -19,9 +18,6 @@ private:
     int yPos{0};
 
 public:
-    std::string getDesc();
-    void setDesc(std::string newDesc);
-
     int getPoints();
     void setPoints(int newPoints);
     void adjustPoints(int amount); // can be positive or negative
@@ -44,15 +40,14 @@ public:
 
     bool useCard(bool isGate);
 
-    void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
-    void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    virtual void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    virtual void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
 
     // player movement functions
     void setXPos(int newXPos);
     int getXPos();
     void setYPos(int newYPos);
     int getYPos();
-    void move(char dir, std::vector<std::vector<std::string>> &map);
     void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &PrevX, int &PrevY);
 };
 
