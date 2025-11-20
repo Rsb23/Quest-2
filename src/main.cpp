@@ -67,11 +67,11 @@ int main()
     GenerateGates(Map);
     GenerateWarden(Map);
 
-    Player * _player;
+    Player *_player;
 
     // Create Store class
     Store _store;
-    
+
     // player class selection loop
     int classSel{0};
     while (!win)
@@ -104,6 +104,7 @@ int main()
                 if (classSel == 1)
                 {
                     _player = new Guardian();
+                    Guardian _player;
                     break;
                 }
                 else if (classSel == 2)
@@ -142,6 +143,12 @@ int main()
         // Main game loop
         while (true)
         {
+            if (_player->getPoints() < 0)
+            {
+                std::cout << "You don't have any more points!\nYou Lose! :(\n";
+                return 0;
+            }
+
             char input{'e'};
 
             // read player input (either direction, entering store, or exiting program)
