@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <cctype>
 #include "player.h"
 
 class Store
@@ -22,9 +23,6 @@ private:
     void playSlots(const std::vector<int> &numbers, int &points);
 
 public:
-    //main constructor
-    Store();
-
     //functions for JUST the store
     void storeMenu(Player &player);
     void purchaseCC(Player &player);
