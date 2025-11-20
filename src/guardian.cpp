@@ -41,7 +41,7 @@ void Guardian::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, i
         std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
 
         Gate _gate;
-        _gate.loadPrompt(*this, Map, PlayX, PlayY, true);
+        _gate.loadPrompt(*this, Map, PlayX, PlayY);
     }
 }
 
@@ -64,6 +64,6 @@ void Guardian::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map,
         std::cout << "The Warden asks you three questions: \n\n";
 
         Warden _warden;
-        _warden.loadPrompt(*this, Map, PlayX, PlayY, true);
+        _warden.loadPrompt(*this, Map, PlayX, PlayY);
     }
 }
