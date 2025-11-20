@@ -22,11 +22,11 @@ vector<bool> CreateTile()
 }
 
 // checks to see if the tile is unitialized, which only occurs if a tile has no exits
-bool IsTileUninitialized(const vector<bool> &tile_exits)
+bool IsTileUninitialized(const vector<bool> &exits)
 {
-    for (bool exit_status : tile_exits)
+    for (int i = 0; i<4 ;i++)
     {
-        if (exit_status)
+        if (exits[i])
         {
             return false;
         }
@@ -99,7 +99,7 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
         SelectedExit = EligibleExits[rand() % EligibleExits.size()];
 
         if (SelectedExit == 0)
-        { // Left: y-- (horizontal)
+        { // Left: y--
             ForcedExit = 2;
                 if(y-1<0){
                     
@@ -108,7 +108,7 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
                 }
         }
         else if (SelectedExit == 1)
-        { // Bottom: x++ (vertical)
+        { // Bottom: x++
             ForcedExit = 3;
                 if(x+1>9){
                     
@@ -117,7 +117,7 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
                 }
         }
         else if (SelectedExit == 2)
-        { // Right: y++ (horizontal)
+        { // Right: y++
             ForcedExit = 0;
                 if(y+1<9){
                     
@@ -126,7 +126,7 @@ void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<ve
                 }
         }
         else if (SelectedExit == 3)
-        { // Top: x-- (vertical)
+        { // Top: x-- 
             ForcedExit = 1;
                 if(x-1<0){
                     
@@ -177,7 +177,7 @@ void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map,
         {
 
             bool isValidMove = false;
-            // Check if the current tile has an exit and it's not the forced return
+            // Check if the current tile has an exit and it's not the forced exit
             if (CurrentExits[i] && (i != ForcedExit))
             {
 
@@ -202,11 +202,11 @@ void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map,
                     next_x--;
                 } // Top: x--
 
-                // 1. Boundary Check: Ensure the target is within 0-9
+                //Ensure the target is within the boundary
                 if (next_x >= 0 && next_x < 10 && next_y >= 0 && next_y < 10)
                 {
 
-                    // Check if Map[next_x][next_y] is the unitialized, and needs to generated
+                    // Check if Map[next_x][next_y] is unitialized
 
                     if (IsTileUninitialized(Map[next_x][next_y]))
                     {
@@ -237,8 +237,6 @@ void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map,
             x = pathStack.back()[0];
             y = pathStack.back()[1];
 
-            // Re-read CurrentExits from the new tile for the next iteration
-            // The ForcedExit will be automatically recalculated in the next iteration.
             continue;
         }
 
@@ -264,7 +262,7 @@ void GenerateMissingPaths(vector<vector<vector<bool>>> &Map, int &completed)
                 continue; // Skip uninitialized tiles
             }
 
-            // Iterate through the four possible exits of the current tile
+            //Go through the four possible exits of the current tile
             for (int k = 0; k < 4; k++)
             {
 
@@ -451,14 +449,14 @@ bool isCompletable(vector<vector<vector<bool>>>& Map){
 
         // Check every exit of current tile
         for(int i = 0; i < 4; i++){
-            // Check if there is an exit (wall) in this direction
+            // Check if there is an exit in this direction
             if(Map[x][y][i]){
                 int nextX = x + Xdir[i];
                 int nextY = y + Ydir[i];
                 
                 // Check if the next coordinates are within the 10x10 grid boundaries
                 if (nextX < 0 || nextX >= 10 || nextY < 0 || nextY >= 10) {
-                    continue; // Skip this move, it goes out of bounds
+                    continue; // Skip
                 }
 
                 //Check if the tile is uninitialized
