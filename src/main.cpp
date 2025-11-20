@@ -1,5 +1,8 @@
 #include "maze.cpp"
 #include "player.cpp"
+#include "guardian.cpp"
+#include "ravager.cpp"
+#include "trickster.cpp"
 #include "store.cpp"
 #include "gate.cpp"
 #include "warden.cpp"
@@ -79,11 +82,8 @@ int main()
         // Tracks current tiles exits
         CurrentExits = Map[PlayX][PlayY];
 
-        // PLAYER CLASS TYPE NOT YET IMPLEMENTED
-        // Gets player class/type
-        // int classSelection{0};
+        int classSel {0};
 
-        /*
         while (true)
         {
             std::cout << "Please Choose Player Class)\n";
@@ -100,24 +100,28 @@ int main()
                     << "Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them\n";
 
             std::cout << "Enter Class (1,2,3, or 4 to exit): ";
-            std::cin >> classSelection;
+            std::cin >> classSel;
 
-            if (classSelection)
+            if (classSel)
             {
-                if (classSelection == 1)
+                if (classSel == 1)
                 {
-                    Player test();
+                    Guardian _player;
                     break;
                 }
-                else if (classSelection == 2)
+                else if (classSel == 2)
                 {
-                    Player test();
+                    Ravager _player;
                     break;
                 }
-                else if (classSelection == 3)
+                else if (classSel == 3)
                 {
-                    Player test();
+                    Trickster _player;
                     break;
+                }
+                else if (classSel == 4){
+                    std::cout << "Goodbye!\n";
+                    return 0;
                 }
                 else
                 {
@@ -130,7 +134,7 @@ int main()
                 std::cout << "Please make a selection\n!";
                 continue;
             }
-        }*/
+        }
 
         // Main game loop
         while (true)
