@@ -2,6 +2,10 @@
 #define STORE_H
 
 #include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <string>
+#include <ctime>
 #include "player.h"
 
 
@@ -10,6 +14,8 @@ class Store
 private:
     // variables
     int itemChoice;
+    points = player.getPoints();
+    std::vector<int> numbers = {1, 2, 3, 4, 5, 7}
     
 public:
     // declare the functions 
