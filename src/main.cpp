@@ -86,7 +86,7 @@ int main()
 
         while (true)
         {
-            std::cout << "Please Choose Player Class)\n";
+            std::cout << "Please Choose Player Class\n";
             std::cout << "Bulwark The Guardian\n"
                     << "\"When the storm hits, Bulwark stands unbroken\"\n"
                     << "Energy Shield - prevents loss of points when Gate OR Warden is incorrect\n"
@@ -94,12 +94,14 @@ int main()
                     << "Aegis The Ravager\n"
                     << "\"Breaker of oaths, bearer of darkness\"\n"
                     << "Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card\n"
-                    << "\n"
+                    << "\n";
+                    /*
                     << "Ronan The Trickster\n"
                     << "\"Illusion is the truth you can't handle\"\n"
                     << "Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them\n";
+                    */
 
-            std::cout << "Enter Class (1,2,3, or 4 to exit): ";
+            std::cout << "Enter Class (1, 2 or 3 to exit): ";
             std::cin >> classSel;
 
             if (classSel)
@@ -114,12 +116,14 @@ int main()
                     Ravager _player;
                     break;
                 }
+                /*
                 else if (classSel == 3)
                 {
                     Trickster _player;
                     break;
                 }
-                else if (classSel == 4){
+                */
+                else if (classSel == 3){
                     std::cout << "Goodbye!\n";
                     return 0;
                 }
