@@ -36,7 +36,7 @@ int Store::winCheck(int slot1, int slot2, int slot3){
     }
 }
 
-bool Store::isNumber(const std::string s) {
+bool Store::isNumber(const std::string &s) {
     for (char c : s) {
         if (!isdigit(c)) return false;
     }
