@@ -3,17 +3,7 @@
 #include "warden.h"
 #include "store.h"
 
-// getters and setterse
-std::string Player::getDesc()
-{
-    return desc;
-}
-
-void Player::setDesc(std::string newDesc)
-{
-    desc = newDesc;
-}
-
+// getters and setters
 int Player::getPoints()
 {
     return points;
@@ -148,7 +138,7 @@ void Player::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, i
 {
     std::cout << "You encounter a Warden guarding the passage. It's leathery skin groans under the stress of keeping it's diseased organs together.\n";
 
-    bool useCC{useCard(true)};
+    bool useCC{useCard(false)};
 
     if (useCC)
     {
@@ -184,88 +174,11 @@ int Player::getYPos()
 {
     return yPos;
 }
-void Player::move(char dir, std::vector<std::vector<std::string>> &map)
-{
-    // "moves" character based on input, doesn't move if it detects a wall, and can be changed to start asking questions when detecting a guard
-    if (dir == 'w')
-    {
-        if (map[xPos - 1][yPos] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
-        }
-        else if (map[xPos - 1][yPos] == "X")
-        {
-            std::cout << "It's a guard!: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            xPos--;
-        }
-    }
-    else if (dir == 's')
-    {
-        if (map[xPos + 1][yPos] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
-        }
-        else if (map[xPos + 1][yPos] == "X")
-        {
-            std::cout << "It's a guard!: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            xPos++;
-        }
-    }
-    else if (dir == 'a')
-    {
-        if (map[xPos][yPos - 1] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
-        }
-        else if (map[xPos][yPos - 1] == "X")
-        {
-            std::cout << "It's a guard!: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            yPos--;
-        }
-    }
-    else if (dir == 'd')
-    {
-        if (map[xPos][yPos + 1] == "*")
-        {
-            std::cout << "There's a wall" << "\n";
-        }
-        else if (map[xPos][yPos + 1] == "X")
-        {
-            std::cout << "It's a guard: (Placeholder question)" << "\n";
-        }
-        else
-        {
-            yPos++;
-        }
-    }
-    else
-    {
-        std::cout << "Invalid character entered" << "\n";
-    }
-}
 
 void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &PrevX, int &PrevY)
 {
     PrevY = PlayY;
     PrevX = PlayX;
-    /*
-    // Shows all moves to the player
-    std::cout << "W: Move Up\n"
-              << "A: Move Left\n"
-              << "S: Move Down\n"
-              << "D: Move Right\n"
-              << "B: Open Shop\n";
-
-    std::cin >> move;*/
 
     // checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
     // all exits should be because of FixWalls()

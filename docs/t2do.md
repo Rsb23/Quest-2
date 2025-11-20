@@ -12,3 +12,4 @@
 #### Additions (Low Priority)
 - [ ] player classes
 - [ ] in-store casino/gambling
+- [ ] Refactoring

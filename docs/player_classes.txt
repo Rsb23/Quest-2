@@ -1,3 +1,5 @@
+1 - Bulwark The Guardian, 2 - Aegis The Ravager, 3 - Ronan The Trickster
+
 Bulwark The Guardian
 "When the storm hits, Bulwark stands unbroken"
 Energy Shield - prevents loss of points when Gate OR Warden is incorrect
@@ -8,4 +10,4 @@ Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card
 
 Ronan The Trickster
 "Illusion is the truth you can't handle"
-Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them
+Shadow Shift - skip over 5 gates without unlocking them
