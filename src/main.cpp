@@ -63,43 +63,38 @@ int main()
 
     } while (!isCompletable(Map));
 
-    // Displays the inital tile before the game loop starts
-    DisplayTile(Map[PlayX][PlayY]);
-
     // Generate enemy locations
     GenerateGates(Map);
     GenerateWarden(Map);
 
-    // Create player class (override above, player class types not yet implemented)
-    Player _player;
+    Player * _player;
 
     // Create Store class
     Store _store;
-
-    // Main game loop
+    
+    // player class selection loop
+    int classSel{0};
     while (!win)
     {
         // Tracks current tiles exits
         CurrentExits = Map[PlayX][PlayY];
 
-        int classSel {0};
-
         while (true)
         {
             std::cout << "Please Choose Player Class\n";
             std::cout << "Bulwark The Guardian\n"
-                    << "\"When the storm hits, Bulwark stands unbroken\"\n"
-                    << "Energy Shield - prevents loss of points when Gate OR Warden is incorrect\n"
-                    << "\n"
-                    << "Aegis The Ravager\n"
-                    << "\"Breaker of oaths, bearer of darkness\"\n"
-                    << "Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card\n"
-                    << "\n";
-                    /*
-                    << "Ronan The Trickster\n"
-                    << "\"Illusion is the truth you can't handle\"\n"
-                    << "Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them\n";
-                    */
+                      << "\"When the storm hits, Bulwark stands unbroken\"\n"
+                      << "Energy Shield - prevents loss of points when Gate OR Warden is incorrect\n"
+                      << "\n"
+                      << "Aegis The Ravager\n"
+                      << "\"Breaker of oaths, bearer of darkness\"\n"
+                      << "Vengeance Protocol - starts with 3 Cue Cards OR 1 Supreme Cue Card\n"
+                      << "\n";
+            /*
+            << "Ronan The Trickster\n"
+            << "\"Illusion is the truth you can't handle\"\n"
+            << "Shadow Shift - skip over 3 gates OR 1 Warden without unlocking them\n";
+            */
 
             std::cout << "Enter Class (1, 2 or 3 to exit): ";
             std::cin >> classSel;
@@ -108,12 +103,12 @@ int main()
             {
                 if (classSel == 1)
                 {
-                    Guardian _player;
+                    _player = new Guardian();
                     break;
                 }
                 else if (classSel == 2)
                 {
-                    Ravager _player;
+                    _player = new Ravager();
                     break;
                 }
                 /*
@@ -123,7 +118,8 @@ int main()
                     break;
                 }
                 */
-                else if (classSel == 3){
+                else if (classSel == 3)
+                {
                     std::cout << "Goodbye!\n";
                     return 0;
                 }
@@ -140,6 +136,9 @@ int main()
             }
         }
 
+        // displays start tile
+        DisplayTile(Map[PlayX][PlayY]);
+
         // Main game loop
         while (true)
         {
@@ -152,7 +151,7 @@ int main()
             if (input == 'b')
             {
                 Store _store;
-                _store.storeMenu(_player);
+                _store.storeMenu(*_player);
                 DisplayTile(Map[PlayX][PlayY]);
             }
             else if (input == 'e')
@@ -173,7 +172,7 @@ int main()
 
                     if (engage == 'y')
                     {
-                        _player.encounterGate(Map, PlayX, PlayY);
+                        _player->encounterGate(Map, PlayX, PlayY);
                         DisplayTile(Map[PlayX][PlayY]);
                     }
                     else
@@ -192,7 +191,7 @@ int main()
 
                     if (engage == 'y')
                     {
-                        _player.encounterWarden(Map, PlayX, PlayY);
+                        _player->encounterWarden(Map, PlayX, PlayY);
                         DisplayTile(Map[PlayX][PlayY]);
                     }
                     else

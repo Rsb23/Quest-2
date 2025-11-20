@@ -34,11 +34,13 @@ Ravager::Ravager()
         if (res == 'c')
         {
             defaultSCC = 0;
+            ccCount = defaultCC;
             break;
         }
         else if (res == 's')
         {
             defaultCC = 0;
+            sccCount = defaultSCC;
             break;
         }
         else
@@ -48,7 +50,7 @@ Ravager::Ravager()
     }
 }
 
-void Ravager::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Ravager::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) 
 {
     std::cout << "You have encountered an old gate. It's strong, oak wood creaks in the breeze.\n";
 
