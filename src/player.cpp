@@ -71,6 +71,12 @@ void Player::incrementWardensCompletedCount()
 
 bool Player::useCard(bool isGate)
 {
+    if (getPoints() < -5)
+    {
+        std::cout << "You don't have any more points!\nYou Lose! :(\n";
+        return 0;
+    }
+
     if (isGate && this->getCueCardCount() > 0)
     {
         std::cout << "You have " << this->getCueCardCount() << " cue cards\n";
