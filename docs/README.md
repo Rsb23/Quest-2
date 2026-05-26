@@ -1,3 +1,4 @@
-# Quest-2
-#### Idea
-CLI based maze game where player navigates through a randomly generated maze and encounters gates and wardens that require answering a personal question about a guild member in MC or truth or lie formats respectively. Completion of each gate not only results in getting closer to the goal but there can be a leveling system that allows the user to unlock cue cards and supreme cue cards that they can use for gates or wardens that they don't want to attempt. See `core_mechanics.md` for a more detailed explaination of the main game loop and logic.
+# Labyrinth Of Horrors
+Interactive game where the player must navigate through a randomly generated labyrinth and encounters gates and wardens. Gates and wardens require answering a question in a multiple-choice format. 
+
+Completion of each gate not only results in getting closer to the exit but each unlock results in a points. The player can purchase cue cards and supreme cue cards with their points in the store. Cue cards and supreme cue cards can be used to unlock gates or wardens without having to answer any questions. Players can also try their luck in the casino and potentially earn points that way. See `core_mechanics.md` for a more detailed explaination of the main game loop.

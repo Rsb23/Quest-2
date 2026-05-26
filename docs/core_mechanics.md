@@ -1,19 +1,16 @@
-# The Foresaken Deep
-Buried far below the world of light, the dungeon festers in eternal gloom, its corridors slick with age and despair. Whispers slither through the dark like dying breaths, carrying the memory of those who never escaped. In the stillness, something stirs—watching, waiting, starving for the sound of life.
-
 ## Player Classes
 When a game is first started, the player can choose one of three player types/classes. Each have their own abilities that can be either be used to avoid or protect when encountering enemies.
+
 #### Bulwark The Guardian
 `"When the storm hits, Bulwark stands unbroken"`
-
 **Energy Shield** - Prevents loss of points when Gate *OR* Warden is incorrect
+
 #### Aegis The Ravager
 `"Breaker of oaths, bearer of darkness"`
-
 **Vengeance Protocol** - starts with 3 Cue Cards *OR* 1 Supreme Cue Card
+
 #### Ronan The Trickster
 `"Illusion is the truth you can't handle"`
-
 **Shadow Shift** - skip over 3 gates *OR* 1 Warden without unlocking them
 
 ## Enemies
