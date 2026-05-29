@@ -14,7 +14,6 @@ int main()
     char move;
     char engage;
     bool win = false;
-<<<<<<< HEAD
     Player * _player;
     
     //Create the maze
