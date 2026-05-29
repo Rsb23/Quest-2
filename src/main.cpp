@@ -14,13 +14,71 @@ int main()
     char move;
     char engage;
     bool win = false;
+<<<<<<< HEAD
     Player * _player;
     
     //Create the maze
     Maze maze;
+=======
+    int y = 0; // Current column index (0-9)
+    int x = 0; // Current row index (0-9)
+    int PrevX;
+    int PrevY;
+    int PlayX = x;
+    int PlayY = y;
+    std::vector<bool> CurrentExits;
+    std::vector<bool> EligibleExits;
+    // Add a stack for backtracking: stores {x, y} pairs
+    std::vector<std::vector<int>> pathStack;
+
+    // A counter to track how many tiles have been initialized (for GenerateMissingPaths)
+    int completed_tiles_count = 0;
+
+    // 10 x 10 x 7 3d vector for the map
+    std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10, std::vector<bool>(7, 0)));
+
+    do
+    {
+        // empty maze
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                for (int k = 0; k < 7; k++)
+                {
+                    Map[i][j][k] = 0;
+                }
+            }
+        }
+
+        Map[x][y] = InitialTile();
+        pathStack.push_back({x, y}); // Push starting tile onto the stack
+        completed_tiles_count++;     // Start tile is the first completed tile
+
+        GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
+
+        // Call the GenerateMissingPaths function to fill in any uninitialized areas
+        for (int i = 0; i < 100; i++)
+        {
+            GenerateMissingPaths(Map, completed_tiles_count);
+            // Places walls at locations where exits don't line up
+            FixWalls(Map);
+        }
+        // Make the win exist
+        GenerateFinish(Map);
+
+    } while (!isCompletable(Map));
+
+    // Generate enemy locations
+    GenerateGates(Map);
+    GenerateWarden(Map);
+
+    Player *_player;
+
+>>>>>>> 7278e7c3594a3aae2a8d4205523c3880e7481d05
     // Create Store class
     Store _store;
-    
+
     // player class selection loop
     int classSel{0};
     while (!win)
@@ -51,6 +109,7 @@ int main()
                 if (classSel == 1)
                 {
                     _player = new Guardian();
+                    Guardian _player;
                     break;
                 }
                 else if (classSel == 2)
@@ -89,6 +148,12 @@ int main()
         // Main game loop
         while (true)
         {
+            if (_player->getPoints() < 0)
+            {
+                std::cout << "You don't have any more points!\nYou Lose! :(\n";
+                return 0;
+            }
+
             char input{'e'};
 
             // read player input (either direction, entering store, or exiting program)
