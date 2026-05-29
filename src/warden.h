@@ -1,5 +1,6 @@
 #ifndef WARDEN_H
 #define WARDEN_H
+#pragma once
 
 #include "gate.h"
 #include "player.h"
@@ -52,10 +53,10 @@ public:
     bool questionUsedPrev(std::vector<std::vector<int>> usedQuestions, int newPerson, int newQ);
 
     // overloads for loadPrompt, need one per type of player, the version with the base class Player is not used, just for completeness and futureproofing
-    void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
-    void loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
-    void loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
-    void loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
+    void loadPrompt(Player &_player, Maze &maze) override;
+    void loadPrompt(Guardian &_guardian, Maze &maze) override;
+    void loadPrompt(Ravager &_ravager, Maze &maze) override;
+    void loadPrompt(Trickster &_trickster, Maze &maze) override;
 };
 
 #endif

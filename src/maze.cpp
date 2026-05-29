@@ -1,42 +1,171 @@
-#include "maze.h"
-#include <queue>
-using namespace std;
+#include "Maze.h"
+#pragma once
+//tdo, fix maze movement, fix maze display
+Maze::Maze(){
+    maze = vector<vector<vector<bool>>>(10,vector<vector<bool>>(10,vector<bool>(7, false)));
+    pathStack = vector<point>();
+    selectionStack = vector<point>();
+    currentTile = {0,0};
+    playerTile = currentTile;
 
-// Sets the exits for the starting tile
-vector<bool> InitialTile()
-{
-    vector<bool> exits;
-    exits = {0, 1, 1, 0, 0, 0, 0};
-    return exits;
+    GenerateMaze();
+
 }
 
-// randomly generates exits when called
-vector<bool> CreateTile()
-{
-    vector<bool> exits = {0, 0, 0, 0, 0, 0, 0};
-    for (int i = 0; i < 4; i++)
-    {
-        exits[i] = rand() % 2;
+Maze::Maze(int x, int y){
+    maze = vector<vector<vector<bool>>>(10,vector<vector<bool>>(10,vector<bool>(7, false)));
+    pathStack = vector<point>();
+    selectionStack = vector<point>();
+    currentTile = {x,y};
+    playerTile = currentTile;
+
+    GenerateMaze();
+}
+
+Maze::Maze(size_t size){
+    maze = vector<vector<vector<bool>>>(size,vector<vector<bool>>(size,vector<bool>(7, false)));
+    pathStack = vector<point>();
+    selectionStack = vector<point>();
+    currentTile = {0,0};
+    playerTile = currentTile;
+
+    GenerateMaze();    
+}
+
+Maze::Maze(int x,int y, size_t size){
+    maze = vector<vector<vector<bool>>>(size,vector<vector<bool>>(size,vector<bool>(7, false)));
+    pathStack = vector<point>();
+    selectionStack = vector<point>();
+    currentTile = {x,y};
+    playerTile = currentTile;
+
+    GenerateMaze();    
+}
+
+bool Maze::IsInitialized(vector<bool> tile){
+    return (tile[0] || tile[1] || tile[2] || tile[3]);
+}
+
+//Randomly places the finish in one of the corners that are not the starting tile
+void Maze::GenerateFinish(){
+    random_device rand;
+    mt19937 gen(rand());
+    uniform_int_distribution choice(0,2);
+
+    switch(choice(gen)){
+        //Top right corner
+        case 0: maze[maze.size()-1][0][6] = true;
+        //Bottom left corner
+        case 1: maze[0][maze.size()-1][6] = true;
+        //Bottom right corner
+        case 2: maze[maze.size()-1][maze.size()-1][6] = true;
     }
-    return exits;
+
 }
 
-// checks to see if the tile is unitialized, which only occurs if a tile has no exits
-bool IsTileUninitialized(const vector<bool> &exits)
-{
-    for (int i = 0; i<4 ;i++)
-    {
-        if (exits[i])
-        {
-            return false;
+//rolls a 1/3 chance to place a gate on each tile, tiles have either a gate, a warden, the finish, or nothing
+void Maze::GenerateGates(){
+    random_device rand;
+    mt19937 gen(rand());
+    uniform_int_distribution choice(0,2);
+
+    for(int x = 0; x<maze.size()-1; x++){
+        for(int y = 0; y<maze.size()-1; y++){
+            if((choice(gen) == 2 && !(maze[x][y][5] || maze[x][y][6])) && (x || y)){
+                maze[x][y][4] = true;
+            }
         }
     }
-    return true;
 }
 
-// prints the tile to the terminal
-void DisplayTile(vector<bool> exits)
-{
+//rolls a 1/10 chance to place a warden on each tile, tiles have either a gate, a warden, or the finish
+void Maze::GenerateWardens(){
+    random_device rand;
+    mt19937 gen(rand());
+    uniform_int_distribution choice(0,9);
+
+    for(int x = 0; x<maze.size()-1; x++){
+        for(int y = 0; y<maze.size()-1; y++){
+            if((choice(gen) == 9 && !(maze[x][y][4] || maze[x][y][6])) && (x || y)){
+                maze[x][y][5] = true;
+            }
+        }
+    }
+}
+
+void Maze::GenerateMaze(){
+
+    point previousTile;
+    pathStack.push_back(currentTile);
+    random_device rd;
+    mt19937 gen(rd());
+
+
+    while (!pathStack.empty()){
+        if(!((currentTile.x)-1 < 0) && !(IsInitialized(maze[currentTile.x-1][currentTile.y]))){
+            selectionStack.push_back({currentTile.x-1,currentTile.y});
+        } 
+        if(!((currentTile.x)+1 > (maze.size()-1)) && !(IsInitialized(maze[currentTile.x+1][currentTile.y]))){
+            selectionStack.push_back({currentTile.x+1,currentTile.y});
+        } 
+        if(!((currentTile.y)-1 < 0) && !(IsInitialized(maze[currentTile.x][currentTile.y-1]))){
+            selectionStack.push_back({currentTile.x,currentTile.y-1});
+        } 
+        if(!((currentTile.y)+1 > (maze.size()-1)) && !(IsInitialized(maze[currentTile.x][currentTile.y+1]))){
+            selectionStack.push_back({currentTile.x,currentTile.y+1});
+        } 
+        
+
+        if(!selectionStack.empty()){
+        previousTile = currentTile;
+        uniform_int_distribution choice(0,static_cast<int>(selectionStack.size()-1));
+        currentTile = selectionStack[choice(gen)];
+        pathStack.push_back(currentTile);
+
+        if(currentTile.x - previousTile.x > 0){
+
+            //Moved Right, give a Left path to current tile and Right path to previous
+            maze[previousTile.x][previousTile.y][0] = true;
+            maze[currentTile.x][currentTile.y][1] = true;
+
+        } else if (currentTile.x - previousTile.x < 0){
+
+            //Moved Left, give a Right path to current tile and Left path to previous
+            maze[previousTile.x][previousTile.y][1] = true;
+            maze[currentTile.x][currentTile.y][0] = true;
+
+        } else if(currentTile.y - previousTile.y > 0){
+
+            //Moved Down, give an Up path to current tile and Down path to previous
+            maze[previousTile.x][previousTile.y][2] = true;
+            maze[currentTile.x][currentTile.y][3] = true;
+
+        } else if(currentTile.y - previousTile.y < 0){
+
+            //Moved Up, give a Down path to current tile, and Up path to previous
+            maze[previousTile.x][previousTile.y][3] = true;
+            maze[currentTile.x][currentTile.y][2] = true;
+
+        }
+
+        } else {
+        pathStack.pop_back();
+        if(!pathStack.empty()){
+        currentTile = pathStack[pathStack.size()-1];
+        }
+        }
+
+        selectionStack.clear();
+    }
+
+    GenerateFinish();
+    GenerateGates();
+    GenerateWardens();
+        
+
+}
+
+void Maze::DisplayTile(vector<bool> tile){
 
     vector<vector<string>> Display(11, vector<string>(11));
 
@@ -45,26 +174,26 @@ void DisplayTile(vector<bool> exits)
         for (int j = 0; j < 11; j++)
         {
             Display[i][j] = "█";
-            if (exits[0] == 1 && ((i == 4 || i == 5 || i == 6) && (j <= 6)))
+            if (tile[1] == 1 && ((i == 4 || i == 5 || i == 6) && (j <= 6)))
             {
 
                 Display[i][j] = ".";
             }
-            if (exits[1] == 1 && ((j == 4 || j == 5 || j == 6) && (i >= 4)))
+            if (tile[3] == 1 && ((j == 4 || j == 5 || j == 6) && (i >= 4)))
             {
 
                 Display[i][j] = ".";
             }
-            if (exits[2] == 1 && ((i == 4 || i == 5 || i == 6) && (j >= 4)))
+            if (tile[0] == 1 && ((i == 4 || i == 5 || i == 6) && (j >= 4)))
             {
 
                 Display[i][j] = ".";
             }
-            if (exits[3] == 1 && ((j == 4 || j == 5 || j == 6) && (i <= 6)))
+            if (tile[2] == 1 && ((j == 4 || j == 5 || j == 6) && (i <= 6)))
             {
                 Display[i][j] = ".";
             }
-            if (exits[4])
+            if (tile[4])
             {
                 for (int i = 4; i <= 6; i++)
                 {
@@ -74,7 +203,7 @@ void DisplayTile(vector<bool> exits)
                     }
                 }
             }
-            else if (exits[5])
+            else if (tile[5])
             {
                 Display[5][5] = "骨";
             }
@@ -89,456 +218,106 @@ void DisplayTile(vector<bool> exits)
     }
 }
 
-// selects and generates the next eligible tile
-void SelectTile(vector<bool> EligibleExits, vector<bool> CurrentExits, vector<vector<vector<bool>>> &Map, int &x, int &y, int &ForcedExit)
-{
-    int SelectedExit;
+void Maze::DisplayPlayerTile(){
+        vector<vector<string>> Display(11, vector<string>(11));
 
-    if (!EligibleExits.empty())
+    for (int i = 0; i < 11; i++)
     {
-        SelectedExit = EligibleExits[rand() % EligibleExits.size()];
-
-        if (SelectedExit == 0)
-        { // Left: y--
-            ForcedExit = 2;
-                if(y-1<0){
-                    
-                } else {
-                    y--;
-                }
-        }
-        else if (SelectedExit == 1)
-        { // Bottom: x++
-            ForcedExit = 3;
-                if(x+1>9){
-                    
-                } else {
-                    x++;
-                }
-        }
-        else if (SelectedExit == 2)
-        { // Right: y++
-            ForcedExit = 0;
-                if(y+1<9){
-                    
-                } else {
-                    y++;
-                }
-        }
-        else if (SelectedExit == 3)
-        { // Top: x-- 
-            ForcedExit = 1;
-                if(x-1<0){
-                    
-                } else {
-                    x--;
-                }
-        }
-
-        vector<bool> RawExits = CreateTile();
-        RawExits[ForcedExit] = 1;
-
-        // Check Left exit (y-1)
-        if (RawExits[0] && (y - 1 < 0))
+        for (int j = 0; j < 11; j++)
         {
-            RawExits[0] = 0;
-        }
-        // Check Bottom exit (x+1)
-        if (RawExits[1] && (x + 1 > 9))
-        {
-            RawExits[1] = 0;
-        }
-        // Check Right exit (y+1)
-        if (RawExits[2] && (y + 1 > 9))
-        {
-            RawExits[2] = 0;
-        }
-        // Check Top exit (x-1)
-        if (RawExits[3] && (x - 1 < 0))
-        {
-            RawExits[3] = 0;
-        }
-
-        Map[x][y] = RawExits;
-    }
-}
-
-void GenerateMaze(vector<bool> &CurrentExits, vector<vector<vector<bool>>> &Map, vector<bool> &EligibleExits, int &x, int &y, vector<vector<int>> &pathStack)
-{
-    int ForcedExit = 3;
-
-    for (int q = 0; q < 15; q++)
-    {
-
-        CurrentExits = Map[x][y];
-        EligibleExits.clear();
-
-        for (int i = 0; i < 4; i++)
-        {
-
-            bool isValidMove = false;
-            // Check if the current tile has an exit and it's not the forced exit
-            if (CurrentExits[i] && (i != ForcedExit))
+            Display[i][j] = "█";
+            if (maze[playerTile.x][playerTile.y][1] && ((i == 4 || i == 5 || i == 6) && (j <= 6)))
             {
 
-                int next_x = x;
-                int next_y = y;
+                Display[i][j] = ".";
+            }
+            if (maze[playerTile.x][playerTile.y][2] && ((j == 4 || j == 5 || j == 6) && (i >= 4)))
+            {
 
-                // Determine the coordinates of the target tile
-                if (i == 0)
-                {
-                    next_y--;
-                } // Left: y--
-                else if (i == 1)
-                {
-                    next_x++;
-                } // Bottom: x++
-                else if (i == 2)
-                {
-                    next_y++;
-                } // Right: y++
-                else if (i == 3)
-                {
-                    next_x--;
-                } // Top: x--
+                Display[i][j] = ".";
+            }
+            if (maze[playerTile.x][playerTile.y][0] && ((i == 4 || i == 5 || i == 6) && (j >= 4)))
+            {
 
-                //Ensure the target is within the boundary
-                if (next_x >= 0 && next_x < 10 && next_y >= 0 && next_y < 10)
+                Display[i][j] = ".";
+            }
+            if (maze[playerTile.x][playerTile.y][3] && ((j == 4 || j == 5 || j == 6) && (i <= 6)))
+            {
+                Display[i][j] = ".";
+            }
+            if (maze[playerTile.x][playerTile.y][4])
+            {
+                for (int i = 4; i <= 6; i++)
                 {
-
-                    // Check if Map[next_x][next_y] is unitialized
-
-                    if (IsTileUninitialized(Map[next_x][next_y]))
+                    for (int j = 4; j <= 6; j++)
                     {
-                        isValidMove = true;
+                        Display[i][j] = "#";
                     }
                 }
             }
-
-            if (isValidMove)
+            else if (maze[playerTile.x][playerTile.y][5])
             {
-                EligibleExits.push_back(i);
+                Display[5][5] = "骨";
             }
+            else
+            {
+                Display[5][5] = "@";
+            }
+            cout << Display[i][j] << " ";
         }
 
-        // Logic for backtracking
-        if (EligibleExits.empty())
-        {
-            // Pop the current dead-end tile
-            pathStack.pop_back();
-
-            if (pathStack.empty())
-            {
-                // if this segment runs, that means all possible paths are filled and generation couldn't finish
-                break; // Exit generation
-            }
-
-            // Move to the previous tile (new x, y)
-            x = pathStack.back()[0];
-            y = pathStack.back()[1];
-
-            continue;
-        }
-
-        // Moves the generator to the new tile
-        SelectTile(EligibleExits, CurrentExits, Map, x, y, ForcedExit);
-        pathStack.push_back({x, y}); // Push the new tile onto the stack
+        cout << endl;
     }
 }
 
-// Function to generate paths from initialized tiles to uninitialized neighbors
-void GenerateMissingPaths(vector<vector<vector<bool>>> &Map, int &completed)
-{
-
-    // Loop through every tile in the 10x10 map
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-
-            // Check if the current tile is initialized (not all exits are 0)
-            if (IsTileUninitialized(Map[i][j]))
-            {
-                continue; // Skip uninitialized tiles
-            }
-
-            //Go through the four possible exits of the current tile
-            for (int k = 0; k < 4; k++)
-            {
-
-                // If there is an exit in this direction
-                if (Map[i][j][k])
-                {
-
-                    int next_x = i;
-                    int next_y = j;
-                    int ForcedExit; // ForcedExit for the new tile
-
-                    // Get the coordinates of the neighbor tile
-                    // also sets the forced exit to be the inverse of the selected exit
-                    if (k == 0)
-                    { // Left: y--
-                        next_y--;
-                        ForcedExit = 2;
-                    }
-                    else if (k == 1)
-                    { // Bottom: x++
-                        next_x++;
-                        ForcedExit = 3;
-                    }
-                    else if (k == 2)
-                    { // Right: y++
-                        next_y++;
-                        ForcedExit = 0;
-                    }
-                    else if (k == 3)
-                    { // Top: x--
-                        next_x--;
-                        ForcedExit = 1;
-                    }
-
-                    // Makes sure it doesn't run into a boundary
-                    if (next_x >= 0 && next_x < 10 && next_y >= 0 && next_y < 10)
-                    {
-
-                        // See if the neighbor tile is uninitialized
-                        if (IsTileUninitialized(Map[next_x][next_y]))
-                        {
-
-                            // Initialize the unitialized tile
-                            vector<bool> RawExits = CreateTile();
-                            // Forces the ForcedExit exit into the current tile
-                            RawExits[ForcedExit] = 1;
-
-                            // Check the new tiles exits to ensure it doesn't try to exit the map
-                            // in order left, bottom, right, top
-
-                            if (RawExits[0] && (next_y - 1 < 0))
-                            {
-                                RawExits[0] = 0;
-                            }
-
-                            if (RawExits[1] && (next_x + 1 > 9))
-                            {
-                                RawExits[1] = 0;
-                            }
-
-                            if (RawExits[2] && (next_y + 1 > 9))
-                            {
-                                RawExits[2] = 0;
-                            }
-
-                            if (RawExits[3] && (next_x - 1 < 0))
-                            {
-                                RawExits[3] = 0;
-                            }
-
-                            // Update the map with the new tile
-                            Map[next_x][next_y] = RawExits;
-                        }
-                    }
-                }
-            }
+void Maze::Move(char dir){
+    pathStack.clear();
+    pathStack.push_back(playerTile);
+    if(dir == 'd'){
+        if(maze[playerTile.x][playerTile.y][0]){
+            playerTile.x++;
+        } else {
+            cout<<"Can't go right, there's a wall!"<<endl;
+            return;
         }
+    } else if (dir == 'a'){
+        if(maze[playerTile.x][playerTile.y][1]){
+            playerTile.x--;
+        } else {
+            cout<<"Can't go left, there's a wall!"<<endl;
+            return;
+        }
+    } else if (dir == 's'){
+        if(maze[playerTile.x][playerTile.y][2]){
+            playerTile.y++;
+        } else {
+            cout<<"Can't go down, there's a wall!";
+            return;
+    }
+    } else if (dir == 'w'){
+        if(maze[playerTile.x][playerTile.y][3]){
+            playerTile.y--;
+        } else {
+            cout<<"Can't go up, there's a wall!"<<endl;
+            return;
+    }
+    } else {
+        throw runtime_error("Invalid Character Entered");
     }
 }
 
-// Turns exits that don't line up with other exits into walls in order to make things consistent
-// Looks at every tile on the map
-void FixWalls(vector<vector<vector<bool>>> &Map)
-{
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-
-            // checks to see if each exit that the tile has is matched by the opposite exit (i.e left to right) in the tile which that exit would lead to
-            // if it doesn't, it turns it into a wall
-            if (Map[i][j][0] && j > 0)
-            {
-                if (!Map[i][j - 1][2])
-                {
-                    Map[i][j][0] = 0;
-                }
-            }
-            if (Map[i][j][1] && i < 9)
-            {
-                if (!Map[i + 1][j][3])
-                {
-                    Map[i][j][1] = 0;
-                }
-            }
-            if (Map[i][j][2] && j < 9)
-            {
-                if (!Map[i][j + 1][0])
-                {
-                    Map[i][j][2] = 0;
-                }
-            }
-            if (Map[i][j][3] && j > 0)
-            {
-                if (!Map[i - 1][j][1])
-                {
-                    Map[i][j][3] = 0;
-                }
-            }
-        }
-    }
+void Maze::MoveBack(){
+    playerTile = pathStack[0];
 }
 
-// Generates a finish by selecting the first eligible tile, starts from the furthest index values and moves inward
-// to try and get the exit far away from the start
-void GenerateFinish(vector<vector<vector<bool>>> &Map)
-{
-    for (int i = 9; i >= 0; i--)
-    {
-        for (int j = 9; j >= 0; j--)
-        {
-            // gives the win flag to the first initialized tile it finds
-            if (!IsTileUninitialized(Map[i][j]) && (!Map[i][j][6]))
-            {
-                // sets the win flag
-                Map[i][j][6] = 1;
-                return;
-            }
-        }
-    }
+vector<bool> Maze::GetPlayerTileStatus(){
+    return maze[playerTile.x][playerTile.y];
 }
 
-bool isCompletable(vector<vector<vector<bool>>>& Map){
-    int finishX = -1;
-    int finishY = -1;
-
-    // Find location of exit
-    for(int i = 0; i<10; i++){
-        for(int j = 0; j<10; j++){
-            if(Map[i][j][6]){
-                finishX = i;
-                finishY = j;
-            }
-        }
-    }
-
-    int startX = 0;
-    int startY = 0;
-
-    vector<int> Pos = {startX, startY}; 
-
-    queue<vector<int>> q;
-    q.push(Pos);
-
-    // flag tiles that have been visited, so they aren't visited again
-    vector<vector<bool>> visited(10, vector<bool>(10, 0));
-    visited[startX][startY] = true; // Mark start tile as visited
-
-    // arrays to check movement directions
-    int Xdir[] = {0, 1, 0, -1};
-    int Ydir[] = {-1, 0, 1, 0};
-
-    // Preform search
-    // loop while there are areas to search
-    while(!q.empty()){
-        vector<int> current = q.front();
-        q.pop();
-        int x = current[0];
-        int y = current[1];
-
-        if(x == finishX && y == finishY){
-            return true;
-        }
-
-        // Check every exit of current tile
-        for(int i = 0; i < 4; i++){
-            // Check if there is an exit in this direction
-            if(Map[x][y][i]){
-                int nextX = x + Xdir[i];
-                int nextY = y + Ydir[i];
-                
-                // Check if the next coordinates are within the 10x10 grid boundaries
-                if (nextX < 0 || nextX >= 10 || nextY < 0 || nextY >= 10) {
-                    continue; // Skip
-                }
-
-                //Check if the tile is uninitialized
-                if(IsTileUninitialized(Map[nextX][nextY])){
-                    continue;
-                }
-                
-                int opposite_exit = (i + 2) % 4;
-                // double check that exit is reciprocated
-                if (!Map[nextX][nextY][opposite_exit]) {
-                    continue; 
-                }
-
-                // Place the visited flag
-                if (!visited[nextX][nextY]) {
-                    visited[nextX][nextY] = true;
-                    q.push({nextX, nextY}); // Push the new coordinate vector
-                }
-            }
-        }
-    }
-
-    // return false if it fails to find the exit
-    return false;
+void Maze::ClearGate(){
+    maze[playerTile.x][playerTile.y][4] = false;
 }
 
-void GenerateGates(vector<vector<vector<bool>>> &Map)
-{
-    for (int i = 9; i >= 0; i--)
-    {
-        for (int j = 9; j >= 0; j--)
-        {
-            // Makes sure the tiles are initialized before placing a gate there
-            if (!IsTileUninitialized(Map[i][j]))
-            {
-                // 1/3 chance of a gate being placed
-                if (!Map[i][j][6])
-                {
-                    if (rand() % 3 == 0)
-                    {
-                        Map[i][j][4] = 1;
-                    }
-                    else
-                    {
-                        Map[i][j][4] = 0;
-                    }
-                }
-                else
-                {
-                    Map[i][j][4] = 0;
-                }
-            }
-        }
-    }
-}
-
-void GenerateWarden(vector<vector<vector<bool>>> &Map)
-{
-    for (int i = 9; i >= 0; i--)
-    {
-        for (int j = 9; j >= 0; j--)
-        {
-            // gives the win flag to the first initialized tile it finds
-            if (!IsTileUninitialized(Map[i][j]))
-            {
-                // 1/10 chance of a Warden being placed
-                if (!Map[i][j][6] && !Map[i][j][4])
-                {
-                    if (rand() % 10 == 0)
-                    {
-                        Map[i][j][5] = 1;
-                    }
-                    else
-                    {
-                        Map[i][j][5] = 0;
-                    }
-                }
-                else
-                {
-                    Map[i][j][5] = 0;
-                }
-            }
-        }
-    }
+void Maze::ClearWarden(){
+    maze[playerTile.x][playerTile.y][5] = false;
 }

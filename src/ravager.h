@@ -1,5 +1,6 @@
 #ifndef RAVAGER_H
 #define RAVAGER_H
+#pragma once
 
 #include "player.h"
 #include <iostream>
@@ -17,8 +18,8 @@ public:
     int getDefaultSCC();
     void setDefaultSCC(int newDefaultSCC);
 
-    void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
-    void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
+    void encounterGate(Maze &maze) override;
+    void encounterWarden(Maze &maze) override;
 
     Ravager(); // constructor, asks player if they want CC or SCC
 };

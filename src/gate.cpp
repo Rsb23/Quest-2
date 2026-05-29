@@ -1,4 +1,5 @@
 #include "gate.h"
+#include "maze.h"
 
 int Gate::getPointsValue()
 {
@@ -21,7 +22,7 @@ int Gate::makeRandomNum(int min, int max)
 	srand(time(0)); // seed RNG
 	return (min + (rand() % (max - min + 1)));
 }
-void Gate::loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Gate::loadPrompt(Player &_player, Maze &maze)
 {
 	while (true)
 	{
@@ -73,7 +74,7 @@ void Gate::loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>
 
 					std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-					Map[PlayX][PlayY][4] = 0;
+					maze.ClearGate();
 					setCompleted(true);
 					_player.adjustPoints(pointsValue);
 					break;
@@ -96,7 +97,7 @@ void Gate::loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>
 		break;
 	}
 }
-void Gate::loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Gate::loadPrompt(Guardian &_guardian, Maze &maze)
 {
 	while (true)
 	{
@@ -148,7 +149,7 @@ void Gate::loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<b
 
 					std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-					Map[PlayX][PlayY][4] = 0;
+					maze.ClearGate();
 					setCompleted(true);
 					_guardian.adjustPoints(pointsValue);
 					break;
@@ -182,7 +183,7 @@ void Gate::loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<b
 		break;
 	}
 }
-void Gate::loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Gate::loadPrompt(Ravager &_ravager, Maze &maze)
 {
 	while (true)
 	{
@@ -234,7 +235,7 @@ void Gate::loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<boo
 
 					std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-					Map[PlayX][PlayY][4] = 0;
+					maze.ClearGate();
 					setCompleted(true);
 					_ravager.adjustPoints(pointsValue);
 					break;
@@ -257,7 +258,7 @@ void Gate::loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<boo
 		break;
 	}
 }
-void Gate::loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Gate::loadPrompt(Trickster &_trickster, Maze &maze)
 {
 	while (true)
 	{
@@ -330,7 +331,7 @@ void Gate::loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vector
 
 					std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-					Map[PlayX][PlayY][4] = 0;
+					maze.ClearGate();
 					setCompleted(true);
 					_trickster.adjustPoints(pointsValue);
 					break;

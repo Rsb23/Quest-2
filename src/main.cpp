@@ -14,61 +14,10 @@ int main()
     char move;
     char engage;
     bool win = false;
-    int y = 0; // Current column index (0-9)
-    int x = 0; // Current row index (0-9)
-    int PrevX;
-    int PrevY;
-    int PlayX = x;
-    int PlayY = y;
-    std::vector<bool> CurrentExits;
-    std::vector<bool> EligibleExits;
-    // Add a stack for backtracking: stores {x, y} pairs
-    std::vector<std::vector<int>> pathStack;
-
-    // A counter to track how many tiles have been initialized (for GenerateMissingPaths)
-    int completed_tiles_count = 0;
-
-    // 10 x 10 x 7 3d vector for the map
-    std::vector<std::vector<std::vector<bool>>> Map(10, std::vector<std::vector<bool>>(10, std::vector<bool>(7, 0)));
-
-    do
-    {
-        // empty maze
-        for (int i = 0; i < 10; i++)
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                for (int k = 0; k < 7; k++)
-                {
-                    Map[i][j][k] = 0;
-                }
-            }
-        }
-
-        Map[x][y] = InitialTile();
-        pathStack.push_back({x, y}); // Push starting tile onto the stack
-        completed_tiles_count++;     // Start tile is the first completed tile
-
-        GenerateMaze(CurrentExits, Map, EligibleExits, x, y, pathStack);
-
-        // Call the GenerateMissingPaths function to fill in any uninitialized areas
-        for (int i = 0; i < 100; i++)
-        {
-            GenerateMissingPaths(Map, completed_tiles_count);
-            // Places walls at locations where exits don't line up
-            FixWalls(Map);
-        }
-        // Make the win exist
-        GenerateFinish(Map);
-
-    } while (!isCompletable(Map));
-
-    // Generate enemy locations
-    GenerateGates(Map);
-    GenerateWarden(Map);
-
     Player * _player;
-
+    
+    //Create the maze
+    Maze maze;
     // Create Store class
     Store _store;
     
@@ -76,8 +25,6 @@ int main()
     int classSel{0};
     while (!win)
     {
-        // Tracks current tiles exits
-        CurrentExits = Map[PlayX][PlayY];
 
         while (true)
         {
@@ -137,7 +84,7 @@ int main()
         }
 
         // displays start tile
-        DisplayTile(Map[PlayX][PlayY]);
+        maze.DisplayPlayerTile();
 
         // Main game loop
         while (true)
@@ -152,7 +99,7 @@ int main()
             {
                 Store _store;
                 _store.storeMenu(*_player);
-                DisplayTile(Map[PlayX][PlayY]);
+                maze.DisplayPlayerTile();
             }
             else if (input == 'e')
             {
@@ -161,10 +108,10 @@ int main()
             }
             else if (input == 'w' || input == 'a' || input == 's' || input == 'd')
             {
-                PlayerMove(input, PlayX, PlayY, CurrentExits, Map, PrevX, PrevY);
-                DisplayTile(Map[PlayX][PlayY]);
+                maze.Move(input);
+                maze.DisplayPlayerTile();
 
-                if (Map[PlayX][PlayY][4])
+                if (maze.GetPlayerTileStatus()[4])
                 {
                     std::cout << "There's A Gate!\n";
                     std::cout << "Challenge? (y/n)\n";
@@ -172,18 +119,17 @@ int main()
 
                     if (engage == 'y')
                     {
-                        _player->encounterGate(Map, PlayX, PlayY);
-                        DisplayTile(Map[PlayX][PlayY]);
+                        _player->encounterGate(maze);
+                        maze.DisplayPlayerTile();
                     }
                     else
                     {
-                        PlayX = PrevX;
-                        PlayY = PrevY;
-                        DisplayTile(Map[PlayX][PlayY]);
+                        maze.MoveBack();
+                        maze.DisplayPlayerTile();
                     }
                 }
 
-                if (Map[PlayX][PlayY][5])
+                if (maze.GetPlayerTileStatus()[5])
                 {
                     std::cout << "There's A Warden\n";
                     std::cout << "Answers the question? (y/n)\n";
@@ -191,14 +137,13 @@ int main()
 
                     if (engage == 'y')
                     {
-                        _player->encounterWarden(Map, PlayX, PlayY);
-                        DisplayTile(Map[PlayX][PlayY]);
+                        _player->encounterWarden(maze);
+                        maze.DisplayPlayerTile();
                     }
                     else
                     {
-                        PlayX = PrevX;
-                        PlayY = PrevY;
-                        DisplayTile(Map[PlayX][PlayY]);
+                        maze.MoveBack();
+                        maze.DisplayPlayerTile();
                     };
                 }
             }
@@ -207,7 +152,7 @@ int main()
                 std::cout << "Please enter a valid option\n!";
             }
             // checks for the win flag
-            if (Map[PlayX][PlayY][6])
+            if (maze.GetPlayerTileStatus()[6])
             {
                 win = true;
                 break;

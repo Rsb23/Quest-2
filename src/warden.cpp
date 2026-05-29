@@ -84,7 +84,7 @@ bool Warden::questionUsedPrev(std::vector<std::vector<int>> usedQuestions, int n
 	return false;
 }
 
-void Warden::loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Warden::loadPrompt(Player &_player, Maze &maze)
 {
 	int questionsCorrect{0};
 	int questionsCount{3};
@@ -127,7 +127,7 @@ void Warden::loadPrompt(Player &_player, std::vector<std::vector<std::vector<boo
 
 			std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-			Map[PlayX][PlayY][5] = 0;
+			maze.ClearWarden();
 			setCompleted(true);
 			_player.adjustPoints(pointsValue);
 			questionsCorrect++;
@@ -146,7 +146,7 @@ void Warden::loadPrompt(Player &_player, std::vector<std::vector<std::vector<boo
 		_player.setPoints(std::floor(_player.getPoints() * 0.75f));
 	}
 }
-void Warden::loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Warden::loadPrompt(Guardian &_guardian, Maze &maze)
 {
 	int questionsCorrect{0};
 	int questionsCount{3};
@@ -189,7 +189,7 @@ void Warden::loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector
 
 			std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-			Map[PlayX][PlayY][5] = 0;
+			maze.ClearWarden();;
 			setCompleted(true);
 			_guardian.adjustPoints(pointsValue);
 			questionsCorrect++;
@@ -222,7 +222,7 @@ void Warden::loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector
 		// _player.setPoints(std::floor(_player.getPoints() * 0.75f));
 	}
 }
-void Warden::loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Warden::loadPrompt(Ravager &_ravager, Maze &maze)
 {
 	int questionsCorrect{0};
 	int questionsCount{3};
@@ -265,7 +265,7 @@ void Warden::loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<b
 
 			std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-			Map[PlayX][PlayY][5] = 0;
+			maze.ClearWarden();;
 			setCompleted(true);
 			_ravager.adjustPoints(pointsValue);
 			questionsCorrect++;
@@ -284,7 +284,7 @@ void Warden::loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<b
 		_ravager.setPoints(std::floor(_ravager.getPoints() * 0.75f));
 	}
 }
-void Warden::loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Warden::loadPrompt(Trickster &_trickster, Maze &maze)
 {
 	int questionsCorrect{0};
 	int questionsCount{3};
@@ -347,7 +347,7 @@ void Warden::loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vect
 
 			std::cout << "Points Increase: +" << pointsValue << "pts\n";
 
-			Map[PlayX][PlayY][5] = 0;
+			maze.ClearWarden();;
 			setCompleted(true);
 			_trickster.adjustPoints(pointsValue);
 			questionsCorrect++;

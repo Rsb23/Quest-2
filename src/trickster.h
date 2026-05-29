@@ -1,5 +1,6 @@
 #ifndef TRICKSTER_H
 #define TRICKSTER_H
+#pragma once
 
 #include "player.h"
 
@@ -12,8 +13,8 @@ public:
     int getDefaultShadowShiftUses();
     void setDefaultShadowShiftUses(int newDefaultShadowShiftUses);
 
-    void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
-    void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY) override;
+    void encounterGate(Maze &maze) override;
+    void encounterWarden(Maze &maze) override;
 };
 
 #endif

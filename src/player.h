@@ -1,10 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include "maze.h"
 class Player
 {
 protected:
@@ -13,9 +14,6 @@ protected:
     int sccCount{0};
     int gatesCompletedCount{0};
     int wardensCompletedCount{0};
-
-    int xPos{0};
-    int yPos{0};
 
 public:
     int getPoints();
@@ -40,15 +38,8 @@ public:
 
     bool useCard(bool isGate);
 
-    virtual void encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
-    virtual void encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
-
-    // player movement functions
-    void setXPos(int newXPos);
-    int getXPos();
-    void setYPos(int newYPos);
-    int getYPos();
-    void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &PrevX, int &PrevY);
+    virtual void encounterGate(Maze &maze);
+    virtual void encounterWarden(Maze &maze);
 };
 
 #endif

@@ -1,5 +1,6 @@
 #ifndef GATE_H
 #define GATE_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -34,10 +35,10 @@ public:
     int makeRandomNum(int min, int max);
 
     // overloads for loadPrompt, need one per type of player, the version with the base class Player is not used, just for completeness and futureproofing
-    virtual void loadPrompt(Player &_player, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
-    virtual void loadPrompt(Guardian &_guardian, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
-    virtual void loadPrompt(Ravager &_ravager, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
-    virtual void loadPrompt(Trickster &_trickster, std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY);
+    virtual void loadPrompt(Player &_player, Maze &maze);
+    virtual void loadPrompt(Guardian &_guardian, Maze &maze);
+    virtual void loadPrompt(Ravager &_ravager, Maze &maze);
+    virtual void loadPrompt(Trickster &_trickster, Maze &maze);
 };
 
 #endif

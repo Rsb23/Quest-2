@@ -1,22 +1,40 @@
-#ifndef MAZE_H
-#define MAZE_H
-#include "store.h"
-#include <iostream>
-#include <ctime>
-#include <cstdlib>
+#pragma once
 #include <vector>
+#include <random>
+#include <iostream>
+using namespace std;
 
-void GenerateWarden(std::vector<std::vector<std::vector<bool>>> &Map);
-void GenerateGates(std::vector<std::vector<std::vector<bool>>> &Map);
-void GenerateFinish(std::vector<std::vector<std::vector<bool>>> &Map);
-void FixWalls(std::vector<std::vector<std::vector<bool>>> &Map);
-void GenerateMissingPaths(std::vector<std::vector<std::vector<bool>>> &Map, int &completed);
-void GenerateMaze(std::vector<bool> &CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, std::vector<bool> &EligibleExits, int &x, int &y, std::vector<std::vector<int>> &pathStack);
-void SelectTile(std::vector<bool> EligibleExits, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &x, int &y, int &ForcedExit);
-void DisplayTile(std::vector<bool> exits);
-bool IsTileUninitialized(const std::vector<bool> &tile_exits);
-// void PlayerMove(int &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, Store store);
-std::vector<bool> CreateTile();
-std::vector<bool> InitialTile();
+struct point{
+     int x,y;
+};
 
-#endif
+
+class Maze{
+    private:
+    vector<vector<vector<bool>>> maze;
+    vector<point> pathStack;
+    vector<point> selectionStack;
+    point currentTile;
+    point playerTile;
+
+    bool IsInitialized(vector<bool>);
+    void GenerateFinish();
+    void GenerateWardens();
+    void GenerateGates();
+    void GenerateMaze();
+
+    public:
+    Maze();
+    Maze(int, int);
+    Maze(size_t);
+    Maze(int, int,size_t);
+
+    void DisplayTile(vector<bool>);
+    void DisplayPlayerTile();
+    vector<bool> GetPlayerTileStatus();
+    void Move(char);
+    void MoveBack();
+    void ClearGate();
+    void ClearWarden();
+
+};

@@ -2,6 +2,7 @@
 #include "gate.h"
 #include "warden.h"
 #include "store.h"
+#include "maze.h"
 
 // getters and setters
 int Player::getPoints()
@@ -111,7 +112,7 @@ bool Player::useCard(bool isGate)
     }
 }
 
-void Player::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Player::encounterGate(Maze &maze)
 {
     std::cout << "You have encountered an old gate. It's strong, oak wood creaks in the breeze.\n";
 
@@ -120,7 +121,7 @@ void Player::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int
     if (useCC)
     {
         std::cout << "Wowowaaaw, you decided to use a cue card! The gate gets knocked down, its hinges snapping off in a flurry that ends in a cloud of dust\n";
-        Map[PlayX][PlayY][4] = 0; // clear the gate from the map/maze
+        maze.ClearGate();// clear the gate from the map/maze
 
         this->setCueCardCount(this->getCueCardCount() - 1);
         this->incrementGatesCompletedCount();
@@ -130,11 +131,11 @@ void Player::encounterGate(std::vector<std::vector<std::vector<bool>>> &Map, int
         std::cout << "Embossed on the gate's ancient wood is a line of text: \n\n";
 
         Gate _gate;
-        _gate.loadPrompt(*this, Map, PlayX, PlayY);
+        _gate.loadPrompt(*this, maze);
     }
 }
 
-void Player::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, int PlayX, int PlayY)
+void Player::encounterWarden(Maze &maze)
 {
     std::cout << "You encounter a Warden guarding the passage. It's leathery skin groans under the stress of keeping it's diseased organs together.\n";
 
@@ -143,7 +144,7 @@ void Player::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, i
     if (useCC)
     {
         std::cout << "Wowowaaaw, you decided to use a supreme cue card! The warden falls to its knees as its flesh melts into dust\n";
-        Map[PlayX][PlayY][5] = 0; // clear the warden from the map/maze
+        maze.ClearWarden(); // clear the warden from the map/maze
 
         this->setSupremeCueCardCount(this->getSupremeCueCardCount() - 1);
         this->incrementWardensCompletedCount();
@@ -153,81 +154,6 @@ void Player::encounterWarden(std::vector<std::vector<std::vector<bool>>> &Map, i
         std::cout << "The Warden asks you three questions: \n\n";
 
         Warden _warden;
-        _warden.loadPrompt(*this, Map, PlayX, PlayY);
-    }
-}
-
-// player movement functions
-void Player::setXPos(int newXPos)
-{
-    xPos = newXPos;
-}
-int Player::getXPos()
-{
-    return xPos;
-}
-void Player::setYPos(int newYPos)
-{
-    yPos = newYPos;
-}
-int Player::getYPos()
-{
-    return yPos;
-}
-
-void PlayerMove(char &move, int &PlayX, int &PlayY, std::vector<bool> CurrentExits, std::vector<std::vector<std::vector<bool>>> &Map, int &PrevX, int &PrevY)
-{
-    PrevY = PlayY;
-    PrevX = PlayX;
-
-    // checks all possible move values, makes sure that there isn't a wall there, also makes sure that the exit is reciprocated
-    // all exits should be because of FixWalls()
-    if (move == 'a')
-    {
-        if (!Map[PlayX][PlayY][0] || !Map[PlayX][PlayY - 1][2])
-        {
-            std::cout << "There's a wall blocking your path" << std::endl;
-        }
-        else
-        {
-            PlayY--;
-        }
-    }
-    else if (move == 's')
-    {
-        if (!Map[PlayX][PlayY][1] || !Map[PlayX + 1][PlayY][3])
-        {
-            std::cout << "There's a wall blocking your path" << std::endl;
-        }
-        else
-        {
-            PlayX++;
-        }
-    }
-    else if (move == 'd')
-    {
-        if (!Map[PlayX][PlayY][2] || !Map[PlayX][PlayY + 1][0])
-        {
-            std::cout << "There's a wall blocking your path" << std::endl;
-        }
-        else
-        {
-            PlayY++;
-        }
-    }
-    else if (move == 'w')
-    {
-        if (!Map[PlayX][PlayY][3] || !Map[PlayX - 1][PlayY][1])
-        {
-            std::cout << "There's a wall blocking your path" << std::endl;
-        }
-        else
-        {
-            PlayX--;
-        }
-    }
-    else
-    {
-        std::cout << "Please Enter A Valid Direction";
+        _warden.loadPrompt(*this, maze);
     }
 }
